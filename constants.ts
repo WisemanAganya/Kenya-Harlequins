@@ -12,12 +12,40 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const PLAYERS: Player[] = [
-  { id: 1, name: 'Wiseman Aganya', position: 'Centre', image: 'https://picsum.photos/400/500?random=1', category: 'men', role: 'Men\'s 7s Captain' },
-  { id: 2, name: 'Jan Remke', position: 'Forward', image: 'https://picsum.photos/400/500?random=2', category: 'women', role: 'Women\'s Captain' },
-  { id: 3, name: 'Patrice Agunda', position: 'Utility Back', image: 'https://picsum.photos/400/500?random=3', category: 'men', role: 'Head Coach / Legend' },
-  { id: 4, name: 'Brian Waraba', position: 'Scrum Half', image: 'https://picsum.photos/400/500?random=4', category: 'men' },
-  { id: 5, name: 'Elisha Koronya', position: 'Prop', image: 'https://picsum.photos/400/500?random=5', category: 'men' },
-  { id: 6, name: 'Hillary Baraza', position: 'Lock', image: 'https://picsum.photos/400/500?random=6', category: 'men' },
+  // Men's XV Squad
+  { id: 1, name: 'Nathaniel Mwangi', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=1', category: 'men' },
+  { id: 2, name: 'Jaika Adams', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=2', category: 'men' },
+  { id: 3, name: 'George Otieno', position: 'Hooker', image: 'https://picsum.photos/400/500?random=3', category: 'men' },
+  { id: 4, name: 'Jeffrey Kiragu', position: 'Hooker', image: 'https://picsum.photos/400/500?random=4', category: 'men', role: 'Captain' },
+  { id: 5, name: 'Winston Odhiambo', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=5', category: 'men', role: 'Vice-Captain' },
+  { id: 6, name: 'Andrew Ogallo', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=6', category: 'men' },
+  { id: 7, name: 'Alex Otieno', position: 'Lock', image: 'https://picsum.photos/400/500?random=7', category: 'men' },
+  { id: 8, name: 'Paul Matani', position: 'Lock', image: 'https://picsum.photos/400/500?random=8', category: 'men' },
+  { id: 9, name: 'Bradley Odero', position: 'Lock', image: 'https://picsum.photos/400/500?random=9', category: 'men' },
+  { id: 10, name: 'Tim Wesoloh', position: 'Lock', image: 'https://picsum.photos/400/500?random=10', category: 'men' },
+  { id: 11, name: 'Edward Shitanda', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=11', category: 'men' },
+  { id: 12, name: 'Victor Gichana', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=12', category: 'men' },
+  { id: 13, name: 'Albert Alela', position: 'Openside Flanker', image: 'https://picsum.photos/400/500?random=13', category: 'men' },
+  { id: 14, name: 'Willy Tino', position: 'Openside Flanker', image: 'https://picsum.photos/400/500?random=14', category: 'men' },
+  { id: 15, name: 'Wycliff Ratemo', position: 'Number Eight', image: 'https://picsum.photos/400/500?random=15', category: 'men' },
+  { id: 16, name: 'Newton Partet', position: 'Number Eight', image: 'https://picsum.photos/400/500?random=16', category: 'men' },
+  { id: 17, name: 'Derrick Shimenga', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=17', category: 'men' },
+  { id: 18, name: 'Shakur Nyongesa', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=18', category: 'men' },
+  { id: 19, name: 'Farhan Juma', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=19', category: 'men', role: 'Captain' },
+  { id: 20, name: 'Simon Ochieng', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=20', category: 'men' },
+  { id: 21, name: 'Mathew Ouma', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=21', category: 'men' },
+  { id: 22, name: 'Joshua Okello', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=22', category: 'men' },
+  { id: 23, name: 'Douglas Kahuri', position: 'Inside Centre', image: 'https://picsum.photos/400/500?random=23', category: 'men' },
+  { id: 24, name: 'Franklin Mukaisi', position: 'Inside Centre', image: 'https://picsum.photos/400/500?random=24', category: 'men', role: 'Vice-Captain' },
+  { id: 25, name: 'David Mwangi', position: 'Outside Centre', image: 'https://picsum.photos/400/500?random=25', category: 'men' },
+  { id: 26, name: 'John Okwatch', position: 'Outside Centre', image: 'https://picsum.photos/400/500?random=26', category: 'men' },
+  { id: 27, name: 'Ramadhan Masete', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=27', category: 'men' },
+  { id: 28, name: 'Cornelios Ambaka', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=28', category: 'men' },
+  { id: 29, name: 'Collins Bett', position: 'Fullback', image: 'https://picsum.photos/400/500?random=29', category: 'men' },
+  { id: 30, name: 'Felix Ochieng', position: 'Fullback', image: 'https://picsum.photos/400/500?random=30', category: 'men' },
+  
+  // Legend / Coach
+  { id: 3, name: 'Patrice Agunda', position: 'Utility Back', image: 'https://picsum.photos/400/500?random=31', category: 'men', role: 'Head Coach / Legend' },
   
   // Women's Team - Front Row
   { id: 101, name: 'Nelly Munavi', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=101', category: 'women' },

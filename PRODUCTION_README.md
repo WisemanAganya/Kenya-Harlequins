@@ -155,6 +155,19 @@ CREATE TABLE news (
 );
 ```
 
+#### `players` table
+```sql
+CREATE TABLE players (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name TEXT NOT NULL,
+  position TEXT NOT NULL,
+  image_url TEXT,
+  category TEXT NOT NULL, -- 'men', 'women', 'sevens'
+  role TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
 ### 4. Run Development Server
 ```bash
 npm run dev

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, hasSupabaseConfig } from '../supabase';
-import { Event, Product, Facility, BookingRequest, NewsItem, Order } from '../types';
-import { LayoutDashboard, Newspaper, Calendar, ShoppingBag, ClipboardList, LogOut, Plus, Trash2, Edit3, CheckCircle, XCircle } from 'lucide-react';
+import { Event, Product, Facility, BookingRequest, NewsItem, Order, Player } from '../types';
+import { LayoutDashboard, Newspaper, Calendar, ShoppingBag, ClipboardList, LogOut, Plus, Trash2, Edit3, CheckCircle, XCircle, Users } from 'lucide-react';
 
-type AdminTab = 'dashboard' | 'news' | 'events' | 'shop' | 'bookings';
+type AdminTab = 'dashboard' | 'news' | 'events' | 'shop' | 'bookings' | 'teams';
 
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
@@ -19,6 +19,7 @@ const Admin: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [facilityBookings, setFacilityBookings] = useState<BookingRequest[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
@@ -42,12 +43,13 @@ const Admin: React.FC = () => {
     if (!hasSupabaseConfig || !session) return;
     setLoading(true);
 
-    const [ordersRes, newsRes, eventsRes, shopRes, bookingsRes] = await Promise.all([
+    const [ordersRes, newsRes, eventsRes, shopRes, bookingsRes, playersRes] = await Promise.all([
       supabase.from('orders').select('*').order('created_at', { ascending: false }),
       supabase.from('news').select('*').order('published_at', { ascending: false }),
       supabase.from('events').select('*').order('date', { ascending: false }),
       supabase.from('products').select('*'),
       supabase.from('facility_bookings').select('*').order('created_at', { ascending: false }),
+      supabase.from('players').select('*').order('id', { ascending: true }),
     ]);
 
     if (!ordersRes.error) setOrders(ordersRes.data || []);
@@ -55,6 +57,7 @@ const Admin: React.FC = () => {
     if (!eventsRes.error) setEvents(eventsRes.data || []);
     if (!shopRes.error) setProducts(shopRes.data || []);
     if (!bookingsRes.error) setFacilityBookings(bookingsRes.data || []);
+    if (!playersRes.error) setPlayers(playersRes.data || []);
 
     setLoading(false);
   };
@@ -106,6 +109,9 @@ const Admin: React.FC = () => {
         <nav className="flex-grow space-y-2">
           <button onClick={() => setActiveTab('dashboard')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'dashboard' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <LayoutDashboard size={18} /> Dashboard
+          </button>
+          <button onClick={() => setActiveTab('teams')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'teams' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
+            <Users size={18} /> Team Management
           </button>
           <button onClick={() => setActiveTab('news')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'news' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <Newspaper size={18} /> News & CMS
@@ -174,6 +180,44 @@ const Admin: React.FC = () => {
                     ))}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'teams' && (
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <table className="w-full text-left">
+                  <thead className="bg-slate-50 border-b border-slate-100">
+                    <tr>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Player</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Position</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Category</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {players.map(p => (
+                      <tr key={p.id} className="hover:bg-slate-50 transition">
+                        <td className="px-6 py-4 flex items-center gap-3">
+                          <img src={p.image} className="w-10 h-10 rounded-full object-cover" />
+                          <div>
+                            <p className="font-bold text-slate-900">{p.name}</p>
+                            {p.role && <p className="text-[10px] font-black uppercase text-quins-magenta">{p.role}</p>}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-xs font-bold text-slate-600 uppercase">{p.position}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-[10px] font-black uppercase px-2 py-1 bg-slate-100 rounded text-slate-500">{p.category}</span>
+                        </td>
+                        <td className="px-6 py-4 text-right space-x-2">
+                          <button className="p-2 text-slate-400 hover:text-quins-blue transition"><Edit3 size={16} /></button>
+                          <button onClick={() => deleteItem('players', p.id)} className="p-2 text-slate-400 hover:text-red-500 transition"><Trash2 size={16} /></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
 
