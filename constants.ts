@@ -44,22 +44,19 @@ export const PLAYERS: Player[] = [
   { id: 29, name: 'Collins Bett', position: 'Fullback', image: 'https://picsum.photos/400/500?random=29', category: 'men' },
   { id: 30, name: 'Felix Ochieng', position: 'Fullback', image: 'https://picsum.photos/400/500?random=30', category: 'men' },
   
-  // Legend / Coach
-  { id: 3, name: 'Patrice Agunda', position: 'Utility Back', image: 'https://picsum.photos/400/500?random=31', category: 'men', role: 'Head Coach / Legend' },
-  
   // New Additions - Men's XV
-  { id: 201, name: 'Hillary Ashivila', position: 'Backrow', image: 'https://picsum.photos/400/500?random=201', category: 'men' },
-  { id: 202, name: 'Patrick Wainaina', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=202', category: 'men' },
-  { id: 203, name: 'Michael Ochieng Jnr', position: 'Wing', image: 'https://picsum.photos/400/500?random=203', category: 'men' },
-  { id: 204, name: 'Jeff Ngugi', position: 'Forward', image: 'https://picsum.photos/400/500?random=204', category: 'men' },
-  { id: 205, name: 'Eriya Lubanga', position: 'Forward', image: 'https://picsum.photos/400/500?random=205', category: 'men' },
-  { id: 206, name: 'Denzel Odando', position: 'Forward', image: 'https://picsum.photos/400/500?random=206', category: 'men' },
-  { id: 207, name: 'Roogers Odundo', position: 'Backrow', image: 'https://picsum.photos/400/500?random=207', category: 'men' },
-  { id: 208, name: 'Isaac Omondi', position: 'Backrow', image: 'https://picsum.photos/400/500?random=208', category: 'men' },
-  { id: 209, name: 'William Wagala', position: 'Wing', image: 'https://picsum.photos/400/500?random=209', category: 'men' },
-  { id: 210, name: 'Mike Ochieng Snr', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=210', category: 'men' },
+  { id: 31, name: 'Hillary Ashivila', position: 'Backrow', image: 'https://picsum.photos/400/500?random=31', category: 'men' },
+  { id: 32, name: 'Patrick Wainaina', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=32', category: 'men' },
+  { id: 33, name: 'Michael Ochieng Jnr', position: 'Wing', image: 'https://picsum.photos/400/500?random=33', category: 'men' },
+  { id: 34, name: 'Jeff Ngugi', position: 'Forward', image: 'https://picsum.photos/400/500?random=34', category: 'men' },
+  { id: 35, name: 'Eriya Lubanga', position: 'Forward', image: 'https://picsum.photos/400/500?random=35', category: 'men' },
+  { id: 36, name: 'Denzel Odando', position: 'Forward', image: 'https://picsum.photos/400/500?random=36', category: 'men' },
+  { id: 37, name: 'Roogers Odundo', position: 'Backrow', image: 'https://picsum.photos/400/500?random=37', category: 'men' },
+  { id: 38, name: 'Isaac Omondi', position: 'Backrow', image: 'https://picsum.photos/400/500?random=38', category: 'men' },
+  { id: 39, name: 'William Wagala', position: 'Wing', image: 'https://picsum.photos/400/500?random=39', category: 'men' },
+  { id: 40, name: 'Mike Ochieng Snr', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=40', category: 'men' },
   
-  // Women's Team - Front Row
+  // Women's Team
   { id: 101, name: 'Nelly Munavi', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=101', category: 'women' },
   { id: 102, name: 'Naomi Muhanji', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=102', category: 'women' },
   { id: 103, name: 'Felistus Amunga', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=103', category: 'women' },
@@ -69,24 +66,18 @@ export const PLAYERS: Player[] = [
   { id: 107, name: 'Sharon Bosibori', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=107', category: 'women' },
   { id: 108, name: 'Pamela Muriuki', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=108', category: 'women' },
   { id: 109, name: 'Miriam Sanau', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=109', category: 'women' },
-  
-  // Women's Team - Locks
   { id: 110, name: 'Tracy Khan', position: 'Lock', image: 'https://picsum.photos/400/500?random=110', category: 'women' },
   { id: 111, name: 'Sandra Oduor', position: 'Lock', image: 'https://picsum.photos/400/500?random=111', category: 'women' },
   { id: 112, name: 'Janet Oyare', position: 'Lock', image: 'https://picsum.photos/400/500?random=112', category: 'women' },
   { id: 113, name: 'Gloria Kifano', position: 'Lock', image: 'https://picsum.photos/400/500?random=113', category: 'women' },
   { id: 114, name: 'Lucy Atieno', position: 'Lock', image: 'https://picsum.photos/400/500?random=114', category: 'women' },
   { id: 115, name: 'Monica Nguono Atieno', position: 'Lock', image: 'https://picsum.photos/400/500?random=115', category: 'women' },
-  
-  // Women's Team - Back Row
   { id: 116, name: 'Belvin Khavere', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=116', category: 'women' },
   { id: 117, name: 'Mercy Kemunto', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=117', category: 'women' },
   { id: 118, name: 'Phoebe Akinyi', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=118', category: 'women' },
   { id: 119, name: 'Zain Mohammed', position: 'Openside Flanker', image: 'https://picsum.photos/400/500?random=119', category: 'women' },
   { id: 120, name: 'Dorris Kimani', position: 'Number Eight', image: 'https://picsum.photos/400/500?random=120', category: 'women' },
   { id: 121, name: 'Hellen Wanjiru', position: 'Number Eight', image: 'https://picsum.photos/400/500?random=121', category: 'women' },
-  
-  // Women's Team - Halfbacks
   { id: 122, name: 'Zuhura Asman', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=122', category: 'women' },
   { id: 123, name: 'Mariam Edna', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=123', category: 'women' },
   { id: 124, name: 'Lavencer Owaga Vallary', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=124', category: 'women' },
@@ -96,8 +87,6 @@ export const PLAYERS: Player[] = [
   { id: 128, name: 'Sheril Owaga', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=128', category: 'women' },
   { id: 129, name: 'Sharllyne Atieno', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=129', category: 'women' },
   { id: 130, name: 'Sharllyne Ingaso', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=130', category: 'women' },
-  
-  // Women's Team - Backs
   { id: 131, name: 'Deleon Indombo', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=131', category: 'women' },
   { id: 132, name: 'Friza Asiko', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=132', category: 'women' },
   { id: 133, name: 'Belinda Oriaso', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=133', category: 'women' },
@@ -109,8 +98,6 @@ export const PLAYERS: Player[] = [
   { id: 139, name: 'Maxine Abuga', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=139', category: 'women' },
   { id: 140, name: 'Catherine Elizabeth', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=140', category: 'women' },
   { id: 141, name: 'Getrude Ambeyi', position: 'Fullback', image: 'https://picsum.photos/400/500?random=141', category: 'women' },
-  
-  // Unassigned / Others
   { id: 142, name: 'Sophie Nabwire', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=142', category: 'women' },
   { id: 143, name: 'Joy Makena', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=143', category: 'women' },
   { id: 144, name: 'Dorothy Mulela', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=144', category: 'women' },
@@ -120,6 +107,34 @@ export const PLAYERS: Player[] = [
   { id: 148, name: 'Rose Waithera', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=148', category: 'women' },
   { id: 149, name: 'Joyce Kamau', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=149', category: 'women' },
   { id: 150, name: 'Diana Nyambura', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=150', category: 'women' },
+
+  // Sevens Provisional Squad
+  { id: 301, name: 'Mario Abungu', position: 'Forward', image: 'https://picsum.photos/400/500?random=301', category: 'sevens' },
+  { id: 302, name: 'Albert Alela', position: 'Forward', image: 'https://picsum.photos/400/500?random=302', category: 'sevens' },
+  { id: 303, name: 'Vincent Omondi', position: 'Forward', image: 'https://picsum.photos/400/500?random=303', category: 'sevens' },
+  { id: 304, name: 'Patrick Wainaina', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=304', category: 'sevens' },
+  { id: 305, name: 'Faran Juma', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=305', category: 'sevens' },
+  { id: 306, name: 'Ramadhan Masetti', position: 'Wing', image: 'https://picsum.photos/400/500?random=306', category: 'sevens' },
+  { id: 307, name: 'Alvin Mutachi', position: 'Back', image: 'https://picsum.photos/400/500?random=307', category: 'sevens' },
+  { id: 308, name: 'Dave MWANGI', position: 'Centre', image: 'https://picsum.photos/400/500?random=308', category: 'sevens' },
+  { id: 309, name: 'Brighton Omondi', position: 'Forward', image: 'https://picsum.photos/400/500?random=309', category: 'sevens' },
+  { id: 310, name: 'Collins Bett', position: 'Fullback', image: 'https://picsum.photos/400/500?random=310', category: 'sevens' },
+  { id: 311, name: 'Victor GICHANA', position: 'Forward', image: 'https://picsum.photos/400/500?random=311', category: 'sevens' },
+  { id: 312, name: 'Matthew Ouma', position: 'Wing', image: 'https://picsum.photos/400/500?random=312', category: 'sevens' },
+  { id: 313, name: 'Derrick SHIMENGA', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=313', category: 'sevens' },
+  { id: 314, name: 'Lawrence Ndu\'ngu', position: 'Forward', image: 'https://picsum.photos/400/500?random=314', category: 'sevens' },
+  { id: 315, name: 'Mukaisi Frankh', position: 'Centre', image: 'https://picsum.photos/400/500?random=315', category: 'sevens' },
+  { id: 316, name: 'Smith Ouma', position: 'Back', image: 'https://picsum.photos/400/500?random=316', category: 'sevens' },
+  { id: 317, name: 'Simon ochieng', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=317', category: 'sevens' },
+  { id: 318, name: 'Micheal Ochieng', position: 'Wing', image: 'https://picsum.photos/400/500?random=318', category: 'sevens' },
+  { id: 319, name: 'Marcus Garvey', position: 'Forward', image: 'https://picsum.photos/400/500?random=319', category: 'sevens' },
+  { id: 320, name: 'willy Tino', position: 'Forward', image: 'https://picsum.photos/400/500?random=320', category: 'sevens' },
+  { id: 321, name: 'Jeremy Kibe', position: 'Back', image: 'https://picsum.photos/400/500?random=321', category: 'sevens' },
+  { id: 322, name: 'Brighton Opiyo', position: 'Back', image: 'https://picsum.photos/400/500?random=322', category: 'sevens' },
+  { id: 323, name: 'Owen', position: 'Forward', image: 'https://picsum.photos/400/500?random=323', category: 'sevens' },
+  { id: 324, name: 'Kahuri', position: 'Centre', image: 'https://picsum.photos/400/500?random=324', category: 'sevens' },
+  { id: 325, name: 'Jan Remke', position: 'Back', image: 'https://picsum.photos/400/500?random=325', category: 'sevens' },
+  { id: 326, name: 'Academy boys', position: 'Development', image: 'https://picsum.photos/400/500?random=326', category: 'sevens' },
 ];
 
 export const TECHNICAL_BENCH = [
@@ -142,69 +157,6 @@ export const EXECUTIVE_COMMITTEE = [
   { name: 'Peris Mukoko', role: 'Hon Treasurer', image: 'https://picsum.photos/400/500?random=404' },
   { name: 'Dennis Begisen', role: 'Grounds Director', image: 'https://picsum.photos/400/500?random=405' },
   { name: 'Joel Ng’ang’a', role: 'Director of Rugby', image: 'https://picsum.photos/400/500?random=406' },
-];
-  
-  // Women's Team - Front Row
-  { id: 101, name: 'Nelly Munavi', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=101', category: 'women' },
-  { id: 102, name: 'Naomi Muhanji', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=102', category: 'women' },
-  { id: 103, name: 'Felistus Amunga', position: 'Loosehead Prop', image: 'https://picsum.photos/400/500?random=103', category: 'women' },
-  { id: 104, name: 'Nura Annisa', position: 'Hooker', image: 'https://picsum.photos/400/500?random=104', category: 'women' },
-  { id: 105, name: 'Maria Gorreti', position: 'Hooker', image: 'https://picsum.photos/400/500?random=105', category: 'women' },
-  { id: 106, name: 'Melody Kamau', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=106', category: 'women' },
-  { id: 107, name: 'Sharon Bosibori', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=107', category: 'women' },
-  { id: 108, name: 'Pamela Muriuki', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=108', category: 'women' },
-  { id: 109, name: 'Miriam Sanau', position: 'Tighthead Prop', image: 'https://picsum.photos/400/500?random=109', category: 'women' },
-  
-  // Women's Team - Locks
-  { id: 110, name: 'Tracy Khan', position: 'Lock', image: 'https://picsum.photos/400/500?random=110', category: 'women' },
-  { id: 111, name: 'Sandra Oduor', position: 'Lock', image: 'https://picsum.photos/400/500?random=111', category: 'women' },
-  { id: 112, name: 'Janet Oyare', position: 'Lock', image: 'https://picsum.photos/400/500?random=112', category: 'women' },
-  { id: 113, name: 'Gloria Kifano', position: 'Lock', image: 'https://picsum.photos/400/500?random=113', category: 'women' },
-  { id: 114, name: 'Lucy Atieno', position: 'Lock', image: 'https://picsum.photos/400/500?random=114', category: 'women' },
-  { id: 115, name: 'Monica Nguono Atieno', position: 'Lock', image: 'https://picsum.photos/400/500?random=115', category: 'women' },
-  
-  // Women's Team - Back Row
-  { id: 116, name: 'Belvin Khavere', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=116', category: 'women' },
-  { id: 117, name: 'Mercy Kemunto', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=117', category: 'women' },
-  { id: 118, name: 'Phoebe Akinyi', position: 'Blindside Flanker', image: 'https://picsum.photos/400/500?random=118', category: 'women' },
-  { id: 119, name: 'Zain Mohammed', position: 'Openside Flanker', image: 'https://picsum.photos/400/500?random=119', category: 'women' },
-  { id: 120, name: 'Dorris Kimani', position: 'Number Eight', image: 'https://picsum.photos/400/500?random=120', category: 'women' },
-  { id: 121, name: 'Hellen Wanjiru', position: 'Number Eight', image: 'https://picsum.photos/400/500?random=121', category: 'women' },
-  
-  // Women's Team - Halfbacks
-  { id: 122, name: 'Zuhura Asman', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=122', category: 'women' },
-  { id: 123, name: 'Mariam Edna', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=123', category: 'women' },
-  { id: 124, name: 'Lavencer Owaga Vallary', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=124', category: 'women' },
-  { id: 125, name: 'Mary Muthoni', position: 'Scrum-half', image: 'https://picsum.photos/400/500?random=125', category: 'women' },
-  { id: 126, name: 'Milkah Chitechi', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=126', category: 'women' },
-  { id: 127, name: 'Loving Mijere', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=127', category: 'women' },
-  { id: 128, name: 'Sheril Owaga', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=128', category: 'women' },
-  { id: 129, name: 'Sharllyne Atieno', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=129', category: 'women' },
-  { id: 130, name: 'Sharllyne Ingaso', position: 'Fly-half', image: 'https://picsum.photos/400/500?random=130', category: 'women' },
-  
-  // Women's Team - Backs
-  { id: 131, name: 'Deleon Indombo', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=131', category: 'women' },
-  { id: 132, name: 'Friza Asiko', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=132', category: 'women' },
-  { id: 133, name: 'Belinda Oriaso', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=133', category: 'women' },
-  { id: 134, name: 'Yvette Oketch', position: 'Left Wing', image: 'https://picsum.photos/400/500?random=134', category: 'women' },
-  { id: 135, name: 'Angel Salamba', position: 'Inside Centre', image: 'https://picsum.photos/400/500?random=135', category: 'women' },
-  { id: 136, name: 'Maureen Muritu', position: 'Outside Centre', image: 'https://picsum.photos/400/500?random=136', category: 'women' },
-  { id: 137, name: 'Cynthia Mwai', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=137', category: 'women' },
-  { id: 138, name: 'Refa Ochando', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=138', category: 'women' },
-  { id: 139, name: 'Maxine Abuga', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=139', category: 'women' },
-  { id: 140, name: 'Catherine Elizabeth', position: 'Right Wing', image: 'https://picsum.photos/400/500?random=140', category: 'women' },
-  { id: 141, name: 'Getrude Ambeyi', position: 'Fullback', image: 'https://picsum.photos/400/500?random=141', category: 'women' },
-  
-  // Unassigned / Others
-  { id: 142, name: 'Sophie Nabwire', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=142', category: 'women' },
-  { id: 143, name: 'Joy Makena', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=143', category: 'women' },
-  { id: 144, name: 'Dorothy Mulela', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=144', category: 'women' },
-  { id: 145, name: 'Cynthia Nekesa', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=145', category: 'women' },
-  { id: 146, name: 'Joy Loreah Apondi', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=146', category: 'women' },
-  { id: 147, name: 'Faith Adhiambo', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=147', category: 'women' },
-  { id: 148, name: 'Rose Waithera', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=148', category: 'women' },
-  { id: 149, name: 'Joyce Kamau', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=149', category: 'women' },
-  { id: 150, name: 'Diana Nyambura', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=150', category: 'women' },
 ];
 
 export const MATCHES: Match[] = [
