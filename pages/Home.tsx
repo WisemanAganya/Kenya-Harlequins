@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, MapPin, Trophy, Users } from 'lucide-react';
-import { MATCHES, NEWS } from '../constants';
+import { MATCHES, NEWS, PARTNERS } from '../constants';
 
 const Home: React.FC = () => {
   const nextMatch = MATCHES.find(m => m.status === 'upcoming') || MATCHES[0];
@@ -154,6 +154,42 @@ const Home: React.FC = () => {
                    </div>
               </div>
           </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="py-20 bg-white border-t border-slate-100">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-4">Our Partners & Sponsors</h2>
+            <div className="h-1 w-12 bg-quins-magenta mx-auto"></div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity duration-500">
+            {PARTNERS.map((partner) => (
+              <a 
+                key={partner.name} 
+                href={partner.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group flex flex-col items-center gap-4 transition-transform hover:scale-110"
+                title={partner.name}
+              >
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name} 
+                  className="h-16 md:h-20 w-auto object-contain filter grayscale group-hover:grayscale-0 transition duration-300"
+                  onError={(e) => {
+                    // Fallback to text if logo fails to load
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <span className="hidden text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-quins-magenta transition text-center">
+                  {partner.name}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

@@ -107,7 +107,7 @@ export const PLAYERS: Player[] = [
   { id: 148, name: 'Rose Waithera', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=148', category: 'women' },
   { id: 149, name: 'Joyce Kamau', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=149', category: 'women' },
   { id: 150, name: 'Diana Nyambura', position: 'Squad Member', image: 'https://picsum.photos/400/500?random=150', category: 'women' },
-
+  
   // Sevens Provisional Squad
   { id: 301, name: 'Mario Abungu', position: 'Forward', image: 'https://picsum.photos/400/500?random=301', category: 'sevens' },
   { id: 302, name: 'Albert Alela', position: 'Forward', image: 'https://picsum.photos/400/500?random=302', category: 'sevens' },
@@ -278,4 +278,11 @@ export const HONOURS = [
   { title: 'Kenya Cup', subtitle: 'Premier domestic crown', years: ['1995', '1996', '1999', '2003', '2008', '2010', '2011', '2012'] },
   { title: 'Enterprise Cup', subtitle: 'Historic tournament winners', years: ['1972', '1985', '2005', '2014'] },
   { title: 'Christie Sevens', subtitle: 'Sevens Festival champions', years: ['2024', '2025'] },
+];
+
+export const PARTNERS = [
+  { name: 'Rohto Mentholatum', url: 'https://www.rohto.co.ke/', logo: 'https://logo.clearbit.com/rohto.co.ke' },
+  { name: 'Crown Paints', url: 'https://www.crownpaints.co.ke/', logo: 'https://logo.clearbit.com/crownpaints.co.ke' },
+  { name: 'Sportpesa', url: 'https://www.ke.sportpesa.com/', logo: 'https://logo.clearbit.com/sportpesa.com' },
+  { name: 'Eveready EA', url: 'https://sameer-group.co.ke/energy-power/eveready-ea-plc/', logo: 'https://logo.clearbit.com/sameer-group.co.ke' },
 ];
