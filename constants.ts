@@ -172,10 +172,29 @@ export const NEWS: NewsItem[] = [
 ];
 
 export const PRODUCTS: Product[] = [
-  { id: 1, name: 'Home Jersey 2025/26', price: 4500, image: 'https://picsum.photos/400/400?random=20', category: 'Kit' },
-  { id: 2, name: 'Training Singlet', price: 2500, image: 'https://picsum.photos/400/400?random=21', category: 'Training' },
-  { id: 3, name: 'Quins Hoodie', price: 5000, image: 'https://picsum.photos/400/400?random=22', category: 'Casual' },
-  { id: 4, name: 'Snapback Cap', price: 1500, image: 'https://picsum.photos/400/400?random=23', category: 'Accessories' },
+  // Playing Kit
+  { id: 1, name: 'Official Match Jersey', price: 4500, image: 'https://picsum.photos/400/400?random=20', category: 'Playing Kit' },
+  { id: 2, name: 'Playing Shorts', price: 2000, image: 'https://picsum.photos/400/400?random=21', category: 'Playing Kit' },
+  { id: 3, name: 'Team Socks', price: 800, image: 'https://picsum.photos/400/400?random=22', category: 'Playing Kit' },
+  { id: 4, name: 'Rugby Boots (Cleats)', price: 8500, image: 'https://picsum.photos/400/400?random=23', category: 'Playing Kit' },
+  { id: 5, name: 'Professional Mouthguard', price: 1200, image: 'https://picsum.photos/400/400?random=24', category: 'Playing Kit' },
+  { id: 6, name: 'Soft Scrum Cap', price: 3500, image: 'https://picsum.photos/400/400?random=25', category: 'Playing Kit' },
+  
+  // Training Gear
+  { id: 7, name: 'Training Shirt / Bib', price: 2500, image: 'https://picsum.photos/400/400?random=26', category: 'Training Gear' },
+  { id: 8, name: 'Performance Gym Shorts', price: 1800, image: 'https://picsum.photos/400/400?random=27', category: 'Training Gear' },
+  { id: 9, name: 'Conditioning Running Shoes', price: 7500, image: 'https://picsum.photos/400/400?random=28', category: 'Training Gear' },
+  { id: 10, name: 'Club Tracksuit (Warm-up)', price: 6500, image: 'https://picsum.photos/400/400?random=29', category: 'Training Gear' },
+  
+  // Team Equipment
+  { id: 11, name: 'Captain\'s Armband', price: 500, image: 'https://picsum.photos/400/400?random=30', category: 'Equipment' },
+  { id: 12, name: 'Professional Kicking Tee', price: 1500, image: 'https://picsum.photos/400/400?random=31', category: 'Equipment' },
+  { id: 13, name: 'Substitution Bibs (Set)', price: 2400, image: 'https://picsum.photos/400/400?random=32', category: 'Equipment' },
+  { id: 14, name: 'Referee Whistle', price: 400, image: 'https://picsum.photos/400/400?random=33', category: 'Equipment' },
+  { id: 15, name: 'Player Kit Bag', price: 3500, image: 'https://picsum.photos/400/400?random=34', category: 'Equipment' },
+  { id: 16, name: 'Rugby Shoulder Pads', price: 4500, image: 'https://picsum.photos/400/400?random=35', category: 'Equipment' },
+  { id: 17, name: 'Strapping Tape (Roll)', price: 600, image: 'https://picsum.photos/400/400?random=36', category: 'Equipment' },
+  { id: 18, name: 'Compression Base Layer', price: 2500, image: 'https://picsum.photos/400/400?random=37', category: 'Equipment' },
 ];
 
 export const MEMBERSHIP_TIERS: MembershipTier[] = [

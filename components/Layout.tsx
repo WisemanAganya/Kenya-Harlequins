@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Menu, X, Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, ShoppingCart } from 'lucide-react';
 import { NAV_ITEMS } from '../constants';
+import { useCart } from '../CartContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { totalItems } = useCart();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -20,6 +22,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex space-x-4">
           <span className="flex items-center gap-1"><Mail size={12} /> info@quins.co.ke</span>
           <span className="flex items-center gap-1"><Phone size={12} /> +254 700 000 000</span>
+        </div>
+        <div className="flex space-x-4 text-gray-400">
+           <span className="uppercase font-bold tracking-tighter">Follow the Quins</span>
         </div>
         <div className="flex space-x-4">
           <a href="#" className="hover:text-quins-blue transition"><Facebook size={14} /></a>
@@ -45,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </NavLink>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-1">
+            <div className="hidden md:flex items-center space-x-1">
               {NAV_ITEMS.map((item) => (
                 <NavLink
                   key={item.path}
@@ -61,15 +66,40 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   {item.label}
                 </NavLink>
               ))}
+              
+              <div className="h-8 w-px bg-gray-200 mx-2"></div>
+              
+              <NavLink to="/checkout" className="relative p-2 text-slate-600 hover:text-quins-magenta transition group">
+                <ShoppingCart size={24} />
+                {totalItems > 0 && (
+                  <span className="absolute top-0 right-0 bg-quins-magenta text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg transform translate-x-1 -translate-y-1">
+                    {totalItems}
+                  </span>
+                )}
+                <span className="absolute -bottom-10 right-0 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                  Checkout (KES)
+                </span>
+              </NavLink>
+
               <NavLink to="/membership" className="ml-4 px-5 py-2 bg-quins-blue text-white rounded-md text-sm font-bold uppercase hover:bg-sky-600 transition shadow-sm">
                 Join Us
               </NavLink>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button className="md:hidden p-2 text-slate-600" onClick={toggleMenu}>
-              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+            {/* Mobile Menu Actions */}
+            <div className="flex items-center gap-4 md:hidden">
+              <NavLink to="/checkout" className="relative p-2 text-slate-600">
+                <ShoppingCart size={24} />
+                {totalItems > 0 && (
+                  <span className="absolute top-0 right-0 bg-quins-magenta text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </NavLink>
+              <button className="p-2 text-slate-600" onClick={toggleMenu}>
+                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
           </div>
         </div>
 
