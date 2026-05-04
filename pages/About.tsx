@@ -1,5 +1,6 @@
 import React from 'react';
 import { Award, Clock, Shield } from 'lucide-react';
+import { EXECUTIVE_COMMITTEE, TECHNICAL_BENCH } from '../constants';
 
 const About: React.FC = () => {
   return (
@@ -40,22 +41,41 @@ const About: React.FC = () => {
             </div>
         </div>
 
-        {/* Leadership Grid */}
+        {/* Executive Leadership */}
         <div className="mb-20">
-            <h2 className="text-2xl font-bold text-slate-900 mb-10 text-center uppercase">Executive Leadership</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                 {[
-                     { role: 'Chairman', name: 'Victor Sudi', color: 'bg-slate-800' },
-                     { role: 'Director of Rugby', name: 'Joel Ng\'ang\'a', color: 'bg-quins-blue' },
-                     { role: 'Head Coach', name: 'Patrice Agunda', color: 'bg-quins-magenta' },
-                     { role: 'Club Secretary', name: 'Executive Member', color: 'bg-quins-chocolate' },
-                 ].map((leader, index) => (
-                     <div key={index} className="bg-white border rounded-lg p-6 shadow-sm hover:shadow-md transition text-center">
-                         <div className={`w-20 h-20 mx-auto ${leader.color} rounded-full mb-4 flex items-center justify-center text-white text-2xl font-bold`}>
-                             {leader.name.charAt(0)}
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center uppercase tracking-tight">Executive Committee</h2>
+            <p className="text-center text-gray-500 max-w-4xl mx-auto mb-12">
+                Joining Sudi on the Executive Committee are newly elected members Mr. Terrence Adembesa, Vice Chairman, Ms. Nekesa Were, Hon Secretary, Ms. Peris Mukoko, Hon Treasurer, and Mr. Dennis Begisen who was re-elected as Grounds Director and Mr. Joel Ng’ang’a who continues as Director of Rugby.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                 {EXECUTIVE_COMMITTEE.map((leader, index) => (
+                     <div key={index} className="bg-white group">
+                         <div className="relative h-64 rounded-2xl overflow-hidden mb-4 shadow-sm border border-gray-100">
+                             <img src={leader.image} alt={leader.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500" />
+                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                          </div>
-                         <h3 className="font-bold text-lg text-slate-900">{leader.name}</h3>
-                         <p className="text-sm text-gray-500 uppercase tracking-wide mt-1">{leader.role}</p>
+                         <h3 className="font-bold text-slate-900 text-sm">{leader.name}</h3>
+                         <p className="text-[10px] font-black uppercase text-quins-magenta tracking-widest mt-1">{leader.role}</p>
+                     </div>
+                 ))}
+            </div>
+        </div>
+
+        {/* Technical Bench */}
+        <div className="mb-20">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center uppercase tracking-tight">Technical Bench</h2>
+            <p className="text-center text-gray-500 mb-12 uppercase text-xs font-bold tracking-widest">2024/25 Kenya Harlequin Staff</p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+                 {TECHNICAL_BENCH.map((staff, index) => (
+                     <div key={index} className="bg-white group">
+                         <div className="relative h-72 rounded-2xl overflow-hidden mb-4 shadow-sm border border-gray-100">
+                             <img src={staff.image} alt={staff.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                             <div className="absolute bottom-4 left-4 right-4">
+                                 <p className="text-[10px] font-black uppercase text-white tracking-widest leading-tight">{staff.role}</p>
+                             </div>
+                         </div>
+                         <h3 className="font-bold text-slate-900">{staff.name}</h3>
                      </div>
                  ))}
             </div>
