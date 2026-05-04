@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, ShoppingCart } from 'lucide-react';
 import { NAV_ITEMS } from '../constants';
 import { useCart } from '../CartContext';
+import CartDrawer from './CartDrawer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,12 +12,13 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { totalItems } = useCart();
+  const { totalItems, setIsCartOpen } = useCart();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-slate-900 bg-gray-50">
+      <CartDrawer />
       {/* Top Bar */}
       <div className="bg-slate-900 text-white text-xs py-2 px-4 hidden md:flex justify-between items-center">
         <div className="flex space-x-4">
@@ -69,17 +71,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               <div className="h-8 w-px bg-gray-200 mx-2"></div>
               
-              <NavLink to="/checkout" className="relative p-2 text-slate-600 hover:text-quins-magenta transition group">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 text-slate-600 hover:text-quins-magenta transition group"
+              >
                 <ShoppingCart size={24} />
                 {totalItems > 0 && (
                   <span className="absolute top-0 right-0 bg-quins-magenta text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center shadow-lg transform translate-x-1 -translate-y-1">
                     {totalItems}
                   </span>
                 )}
-                <span className="absolute -bottom-10 right-0 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
-                  Checkout (KES)
-                </span>
-              </NavLink>
+              </button>
 
               <NavLink to="/membership" className="ml-4 px-5 py-2 bg-quins-blue text-white rounded-md text-sm font-bold uppercase hover:bg-sky-600 transition shadow-sm">
                 Join Us
@@ -88,14 +90,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Mobile Menu Actions */}
             <div className="flex items-center gap-4 md:hidden">
-              <NavLink to="/checkout" className="relative p-2 text-slate-600">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 text-slate-600"
+              >
                 <ShoppingCart size={24} />
                 {totalItems > 0 && (
                   <span className="absolute top-0 right-0 bg-quins-magenta text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
-              </NavLink>
+              </button>
               <button className="p-2 text-slate-600" onClick={toggleMenu}>
                 {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
               </button>

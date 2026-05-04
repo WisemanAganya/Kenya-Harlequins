@@ -9,12 +9,15 @@ interface CartContextValue {
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
+  isCartOpen: boolean;
+  setIsCartOpen: (open: boolean) => void;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 const STORAGE_KEY = 'quins_cart_v1';
 
 const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [items, setItems] = useState<CartItem[]>(() => {
     if (typeof window === 'undefined') return [];
     try {
@@ -41,6 +44,7 @@ const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       }
       return [...current, item];
     });
+    setIsCartOpen(true);
   };
 
   const removeFromCart = (id: string) => {
@@ -67,7 +71,7 @@ const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
   return (
     <CartContext.Provider
-      value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, subtotal }}
+      value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, subtotal, isCartOpen, setIsCartOpen }}
     >
       {children}
     </CartContext.Provider>
