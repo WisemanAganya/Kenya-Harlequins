@@ -5,7 +5,7 @@ import { Player } from '../types';
 const Teams: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'men' | 'women' | 'sevens'>('men');
 
-  const filteredPlayers = PLAYERS; // In a real app, filter by category
+  const filteredPlayers = PLAYERS.filter(p => p.category === activeTab);
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">

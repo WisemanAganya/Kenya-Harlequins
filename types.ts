@@ -8,6 +8,7 @@ export interface Player {
   name: string;
   position: string;
   image: string;
+  category: 'men' | 'women' | 'sevens';
   caps?: number;
   role?: string;
 }
