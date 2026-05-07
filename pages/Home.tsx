@@ -6,16 +6,37 @@ import { MATCHES, NEWS, PARTNERS } from '../constants';
 const Home: React.FC = () => {
   const nextMatch = MATCHES.find(m => m.status === 'upcoming') || MATCHES[0];
 
+  const heroImages = [
+    '/assets/kh/Hero/H1.jpg',
+    '/assets/kh/Hero/H2.PNG',
+    '/assets/kh/Hero/H3.PNG',
+    '/assets/kh/Hero/H4.PNG',
+    '/assets/kh/Hero/H5.jpg',
+    '/assets/kh/Hero/H6.jpg',
+  ];
+
+  const [currentHero, setCurrentHero] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHero((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div>
       {/* Hero Section */}
       <section className="relative h-[600px] bg-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src="https://picsum.photos/1920/1080?random=100" 
-            alt="Quins Action" 
-            className="w-full h-full object-cover opacity-40"
-          />
+          {heroImages.map((img, idx) => (
+            <img 
+              key={idx}
+              src={img} 
+              alt={`Quins Action ${idx + 1}`} 
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${idx === currentHero ? 'opacity-40' : 'opacity-0'}`}
+            />
+          ))}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
         </div>
         
@@ -38,6 +59,17 @@ const Home: React.FC = () => {
             <Link to="/membership" className="px-8 py-3 bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white font-bold rounded-md transition text-center">
               Become a Member
             </Link>
+          </div>
+
+          {/* Carousel Indicators */}
+          <div className="absolute bottom-10 left-4 flex space-x-2">
+            {heroImages.map((_, idx) => (
+              <button 
+                key={idx}
+                onClick={() => setCurrentHero(idx)}
+                className={`w-2 h-2 rounded-full transition-all ${idx === currentHero ? 'bg-quins-blue w-6' : 'bg-white/30'}`}
+              />
+            ))}
           </div>
         </div>
       </section>
