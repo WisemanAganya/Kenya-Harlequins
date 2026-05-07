@@ -4,6 +4,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', path: '/' },
   { label: 'About', path: '/about' },
   { label: 'Teams', path: '/teams' },
+  { label: 'Christie 7s', path: '/christie-7s' },
   { label: 'Fixtures', path: '/fixtures' },
   { label: 'Tickets', path: '/tickets' },
   { label: 'Membership', path: '/membership' },
@@ -242,17 +243,18 @@ export const EVENT_LIST = [
   },
   {
     id: 2,
-    title: 'Christie Sevens Inaugural Tournament',
+    title: 'Christie Sevens 2025 - 60th Edition',
     date: '2025-07-18',
-    time: '10:00',
+    time: '08:00',
     venue: 'RFUEA Ground',
     competition: 'Christie Sevens',
     category: '7s Tournament',
-    description: 'A celebration of sevens rugby with international sides, fan zones, and premium hospitality packages.',
+    description: 'Africa’s premier rugby 7s club tournament celebrating its 60th edition. Featuring Men’s, Women’s, Age Grade, and Veterans tournaments in one massive festival.',
     ticketTypes: [
-      { name: 'Bronze Pass', description: 'Day access to tournament', price: 1200 },
-      { name: 'Silver Pass', description: 'Includes merchandise voucher', price: 2200 },
-      { name: 'Gold Hospitality', description: 'VIP lounge with catering.', price: 4500 },
+      { name: 'Standard Pass', description: 'General admission access.', price: 1000 },
+      { name: 'VIP Pass', description: 'Access to Executive Lounge and hospitality.', price: 4000 },
+      { name: 'Family Bundle', description: 'Access for 2 adults and 2 children.', price: 2500 },
+      { name: 'Student Pass', description: 'Discounted entry with valid ID.', price: 500 },
     ]
   },
   {

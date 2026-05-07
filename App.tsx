@@ -15,6 +15,7 @@ import News from './pages/News';
 import Reports from './pages/Reports';
 import Admin from './pages/Admin';
 import Contact from './pages/Contact';
+import Christie7s from './pages/Christie7s';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/history" element={<History />} />
           <Route path="/teams" element={<Teams />} />
+          <Route path="/christie-7s" element={<Christie7s />} />
           <Route path="/fixtures" element={<Fixtures />} />
           <Route path="/tickets" element={<Tickets />} />
           <Route path="/checkout" element={<Checkout />} />
