@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, hasSupabaseConfig } from '../supabase';
 import { Event, Product, Facility, BookingRequest, NewsItem, Order, Player } from '../types';
-import { LayoutDashboard, Newspaper, Calendar, ShoppingBag, ClipboardList, LogOut, Plus, Trash2, Edit3, CheckCircle, XCircle, Users } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Calendar, ShoppingBag, ClipboardList, LogOut, Plus, Trash2, Edit3, CheckCircle, XCircle, Users, FileText, PieChart, BarChart, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
-type AdminTab = 'dashboard' | 'news' | 'events' | 'shop' | 'bookings' | 'teams';
+type AdminTab = 'dashboard' | 'news' | 'events' | 'shop' | 'bookings' | 'teams' | 'reports';
 
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
@@ -124,6 +124,9 @@ const Admin: React.FC = () => {
           </button>
           <button onClick={() => setActiveTab('bookings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'bookings' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <ClipboardList size={18} /> Bookings
+          </button>
+          <button onClick={() => setActiveTab('reports')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'reports' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
+            <FileText size={18} /> Financial Reports
           </button>
         </nav>
 
@@ -332,6 +335,147 @@ const Admin: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            {activeTab === 'reports' && (
+              <div className="space-y-8 pb-20">
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-3 bg-green-100 text-green-600 rounded-2xl"><DollarSign size={24}/></div>
+                      <span className="text-xs font-bold text-green-500 flex items-center gap-1"><TrendingUp size={12}/> +12%</span>
+                    </div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Total Revenue</p>
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">KES 4,850,000</h3>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-3 bg-red-100 text-red-600 rounded-2xl"><TrendingDown size={24}/></div>
+                      <span className="text-xs font-bold text-red-500 flex items-center gap-1"><TrendingUp size={12}/> +5%</span>
+                    </div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Total Expenses</p>
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">KES 1,240,000</h3>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-3 bg-blue-100 text-blue-600 rounded-2xl"><PieChart size={24}/></div>
+                      <span className="text-xs font-bold text-blue-500">Target: 85%</span>
+                    </div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Net Profit</p>
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">KES 3,610,000</h3>
+                  </div>
+                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm border-l-4 border-l-quins-magenta">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-3 bg-pink-100 text-quins-magenta rounded-2xl"><Star size={24}/></div>
+                    </div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Christie 7s ROI</p>
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">285%</h3>
+                  </div>
+                </div>
+
+                {/* Christie Sevens Specifics */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                    <div className="flex justify-between items-center mb-6">
+                      <h3 className="font-black text-xl uppercase tracking-tighter">Christie Sevens Breakdown</h3>
+                      <div className="flex gap-2">
+                        <span className="px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold uppercase">Day 1</span>
+                        <span className="px-3 py-1 bg-quins-magenta text-white rounded-full text-[10px] font-bold uppercase">Day 2</span>
+                      </div>
+                    </div>
+                    <div className="space-y-6">
+                      <div className="relative pt-1">
+                        <div className="flex mb-2 items-center justify-between">
+                          <div><span className="text-xs font-black uppercase inline-block text-slate-600">Regular Tickets</span></div>
+                          <div className="text-right"><span className="text-xs font-black inline-block text-slate-900">KES 1,450,000</span></div>
+                        </div>
+                        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-slate-100">
+                          <div style={{ width: "65%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-quins-blue"></div>
+                        </div>
+                      </div>
+                      <div className="relative pt-1">
+                        <div className="flex mb-2 items-center justify-between">
+                          <div><span className="text-xs font-black uppercase inline-block text-slate-600">VIP & Hospitality</span></div>
+                          <div className="text-right"><span className="text-xs font-black inline-block text-slate-900">KES 2,100,000</span></div>
+                        </div>
+                        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-slate-100">
+                          <div style={{ width: "85%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-quins-magenta"></div>
+                        </div>
+                      </div>
+                      <div className="relative pt-1">
+                        <div className="flex mb-2 items-center justify-between">
+                          <div><span className="text-xs font-black uppercase inline-block text-slate-600">Merchandise Sales</span></div>
+                          <div className="text-right"><span className="text-xs font-black inline-block text-slate-900">KES 840,000</span></div>
+                        </div>
+                        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-slate-100">
+                          <div style={{ width: "40%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-quins-chocolate"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl overflow-hidden relative">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-quins-blue opacity-10 blur-3xl"></div>
+                    <h3 className="font-black text-xl uppercase tracking-tighter mb-6">Regular vs Post Season</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Regular Season</p>
+                        <p className="text-xl font-black">KES 12.4M</p>
+                        <div className="mt-2 text-[10px] text-green-400 font-bold">+18.2% vs Last Year</div>
+                      </div>
+                      <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Post Season</p>
+                        <p className="text-xl font-black">KES 5.8M</p>
+                        <div className="mt-2 text-[10px] text-quins-blue font-bold">Projected +25%</div>
+                      </div>
+                      <div className="col-span-2 p-4 bg-quins-magenta/20 rounded-2xl border border-quins-magenta/30">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest mb-1">Combined Growth</p>
+                            <p className="text-2xl font-black">22.4%</p>
+                          </div>
+                          <BarChart size={40} className="text-white/20" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Audit & Balance Sheet */}
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center">
+                    <h3 className="font-black text-lg uppercase tracking-tighter">Audit Reports & Transaction Ledger</h3>
+                    <button className="text-xs font-bold text-quins-blue hover:underline">Download full PDF</button>
+                  </div>
+                  <table className="w-full text-left">
+                    <thead className="bg-slate-50">
+                      <tr>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Transaction ID</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Category</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Description</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Amount</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {[
+                        { id: 'TXN-9021', cat: 'Tickets', desc: 'Christie 7s Day 2 VIP Bulk', amt: 'KES 240,000', status: 'Balanced' },
+                        { id: 'TXN-9022', cat: 'Sponsorship', desc: 'Minet Diamond Tier Instalment', amt: 'KES 500,000', status: 'Balanced' },
+                        { id: 'TXN-9023', cat: 'Facility', desc: 'RFUEA Ground Maintenance', amt: '-KES 45,000', status: 'Audited' },
+                        { id: 'TXN-9024', cat: 'Merch', desc: 'Replica Jersey Batch A', amt: 'KES 185,000', status: 'Balanced' },
+                      ].map(row => (
+                        <tr key={row.id} className="hover:bg-slate-50 transition">
+                          <td className="px-6 py-4 font-mono text-[10px] font-bold text-slate-400">{row.id}</td>
+                          <td className="px-6 py-4"><span className="text-[10px] font-black uppercase px-2 py-1 bg-slate-100 rounded text-slate-500">{row.cat}</span></td>
+                          <td className="px-6 py-4 text-xs font-bold text-slate-900">{row.desc}</td>
+                          <td className={`px-6 py-4 text-xs font-black ${row.amt.startsWith('-') ? 'text-red-500' : 'text-slate-900'}`}>{row.amt}</td>
+                          <td className="px-6 py-4 text-right"><span className="text-[10px] font-black text-green-500">{row.status}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>

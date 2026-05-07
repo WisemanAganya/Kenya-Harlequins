@@ -307,6 +307,21 @@ const Christie7s: React.FC = () => {
       {/* Sponsors Section */}
       <section className="py-24 bg-slate-900">
         <div className="container mx-auto px-4">
+          {/* Diamond Sponsors */}
+          <div className="mb-24 text-center">
+            <h3 className="text-3xl font-black uppercase mb-12 tracking-[0.4em] text-white">Diamond Sponsors</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-center justify-items-center">
+              {['Minet', 'CHLORIDE EXIDE', 'SportPesa', 'TUSKER'].map(s => (
+                <div key={s} className="group relative w-full aspect-square bg-white rounded-2xl flex items-center justify-center p-8 transition-transform hover:scale-105 duration-500 shadow-[0_0_40px_rgba(255,255,255,0.05)]">
+                   <div className="text-xl font-black uppercase tracking-tighter text-slate-900 text-center">
+                     {s}
+                   </div>
+                   <div className="absolute inset-0 border-4 border-transparent group-hover:border-white/20 rounded-2xl transition duration-500"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Gold Sponsors */}
           <div className="mb-20">
             <h3 className="text-2xl font-black uppercase mb-12 text-center tracking-[0.3em] text-gray-400">Gold Sponsors</h3>

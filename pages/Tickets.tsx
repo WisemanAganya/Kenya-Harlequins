@@ -23,7 +23,7 @@ const Tickets: React.FC = () => {
         .order('date', { ascending: true });
       
       if (data?.length) {
-        setEvents(data.map((event: any) => ({ ...event, ticketTypes: event.ticketTypes || [] })));
+        setEvents(data.map((event: any) => ({ ...event, ticket_types: event.ticket_types || [] })));
       }
       setLoading(false);
     };
@@ -81,7 +81,7 @@ const Tickets: React.FC = () => {
                         </div>
                       </div>
                       <div className="space-y-4">
-                        {event.ticketTypes.map((ticket) => (
+                        {(event.ticket_types || []).map((ticket) => (
                           <div key={ticket.name} className="border rounded-2xl p-4 bg-slate-50">
                             <div className="flex items-center justify-between gap-4">
                               <div>
