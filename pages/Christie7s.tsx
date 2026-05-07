@@ -249,6 +249,114 @@ const Christie7s: React.FC = () => {
         </div>
       </section>
 
+      {/* Tickets Section */}
+      <section className="py-24 bg-slate-950 border-t border-white/5">
+        <div className="container mx-auto px-4 text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-black uppercase mb-4">Feel The Rhythm, Feel The Ride</h2>
+          <p className="text-gray-400 text-xl">The Greatest Rugby Festival In Town</p>
+        </div>
+
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl">
+          {/* Regular */}
+          <div className="bg-green-700/20 border border-green-500/30 p-10 rounded-3xl flex flex-col items-center group hover:bg-green-700/30 transition duration-500">
+            <h3 className="text-2xl font-black uppercase mb-2 text-green-400">Regular</h3>
+            <p className="text-gray-400 mb-8 italic">"Rugby, festival, good vibes!"</p>
+            <div className="text-5xl font-black mb-8 text-white">KES 450</div>
+            <ul className="space-y-4 mb-10 text-left w-full">
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-green-500" size={18} /> KES 450 – Early Bird</li>
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-green-500" size={18} /> KES 650 – Advance</li>
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-green-500" size={18} /> KES 800 – Gate</li>
+            </ul>
+            <Link to="/tickets" className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase rounded-xl transition text-center tracking-widest border border-white/10">
+              Buy Now
+            </Link>
+          </div>
+
+          {/* VIP */}
+          <div className="bg-sky-700/20 border border-sky-500/30 p-10 rounded-3xl flex flex-col items-center group hover:bg-sky-700/30 transition duration-500 scale-105 shadow-2xl">
+            <h3 className="text-2xl font-black uppercase mb-2 text-sky-400">VIP</h3>
+            <p className="text-gray-400 mb-8 italic">"Enjoy our executive hospitality."</p>
+            <div className="text-5xl font-black mb-8 text-white">KES 2500</div>
+            <ul className="space-y-4 mb-10 text-left w-full">
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-sky-500" size={18} /> KES 2,500 – Early Bird</li>
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-sky-500" size={18} /> KES 3,000 – Advance</li>
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-sky-500" size={18} /> KES 4,000 – Gate</li>
+            </ul>
+            <Link to="/tickets" className="w-full py-4 bg-quins-blue hover:bg-sky-600 text-white font-black uppercase rounded-xl transition text-center tracking-widest shadow-lg">
+              Buy Now
+            </Link>
+          </div>
+
+          {/* Tailgate */}
+          <div className="bg-slate-800/40 border border-white/10 p-10 rounded-3xl flex flex-col items-center group hover:bg-slate-800/60 transition duration-500">
+            <h3 className="text-2xl font-black uppercase mb-2 text-gray-300">Tailgate</h3>
+            <p className="text-gray-400 mb-8 italic">"Upgrade your game day."</p>
+            <div className="text-5xl font-black mb-8 text-white">KES 5000</div>
+            <ul className="space-y-4 mb-10 text-left w-full">
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-white" size={18} /> KES 5,000 solo pass</li>
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-white" size={18} /> KES 14,250 squad of three</li>
+              <li className="flex items-center gap-3 text-gray-300 font-bold"><ShieldCheck className="text-white" size={18} /> KES 22,500 squad of five</li>
+            </ul>
+            <Link to="/tickets" className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase rounded-xl transition text-center tracking-widest border border-white/10">
+              Buy Now
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Sponsors Section */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          {/* Gold Sponsors */}
+          <div className="mb-20">
+            <h3 className="text-2xl font-black uppercase mb-12 text-center tracking-[0.3em] text-gray-400">Gold Sponsors</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-70">
+              {['ROHTO', 'NATION MEDIA', 'ABSA', 'PROTEL STUDIOS', 'AS SPORTS', 'CROWN'].map(s => (
+                <div key={s} className="text-sm font-black uppercase tracking-widest text-white p-4 border border-white/5 rounded-lg w-full text-center hover:opacity-100 transition">
+                  {s}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Silver Sponsors */}
+          <div className="mb-20">
+            <h3 className="text-2xl font-black uppercase mb-12 text-center tracking-[0.3em] text-gray-400">Silver Sponsors</h3>
+            <div className="flex flex-wrap justify-center gap-8 items-center opacity-60">
+              {['Agulu Lounge', 'QONA', 'SANLOO'].map(s => (
+                <div key={s} className="text-lg font-black uppercase tracking-widest text-white px-8 py-4 border border-white/5 rounded-lg hover:opacity-100 transition">
+                  {s}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bronze Sponsors */}
+          <div className="mb-20">
+            <h3 className="text-2xl font-black uppercase mb-12 text-center tracking-[0.3em] text-gray-400">Bronze Sponsors</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-50">
+              {['AMARA', 'WELLS FARGO', 'mookh.', 'Eco can'].map(s => (
+                <div key={s} className="text-sm font-black uppercase tracking-widest text-white hover:opacity-100 transition">
+                  {s}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tournament Partners */}
+          <div>
+            <h3 className="text-2xl font-black uppercase mb-12 text-center tracking-[0.3em] text-gray-400">Tournament Partners</h3>
+            <div className="flex flex-wrap justify-center gap-12 items-center opacity-40">
+              {['TISINI', 'BiJON', 'African Women\'s Rugby', 'BASERCAP', 'Archtron', 'G4', 'Crying Stone Media'].map(s => (
+                <div key={s} className="text-xs font-black uppercase tracking-[0.2em] text-white hover:opacity-100 transition">
+                  {s}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Ticket CTA Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-quins-blue opacity-10"></div>

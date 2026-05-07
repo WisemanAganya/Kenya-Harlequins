@@ -249,12 +249,10 @@ export const EVENT_LIST = [
     venue: 'RFUEA Ground',
     competition: 'Christie Sevens',
     category: '7s Tournament',
-    description: 'Africa’s premier rugby 7s club tournament celebrating its 60th edition. Featuring Men’s, Women’s, Age Grade, and Veterans tournaments in one massive festival.',
     ticketTypes: [
-      { name: 'Standard Pass', description: 'General admission access.', price: 1000 },
-      { name: 'VIP Pass', description: 'Access to Executive Lounge and hospitality.', price: 4000 },
-      { name: 'Family Bundle', description: 'Access for 2 adults and 2 children.', price: 2500 },
-      { name: 'Student Pass', description: 'Discounted entry with valid ID.', price: 500 },
+      { name: 'Regular Pass', description: 'Early Bird: 450 | Advance: 650 | Gate: 800', price: 450 },
+      { name: 'VIP Pass', description: 'Early Bird: 2500 | Advance: 3000 | Gate: 4000', price: 2500 },
+      { name: 'Tailgate Pass', description: 'Solo: 5000 | Squad of 3: 14250 | Squad of 5: 22500', price: 5000 },
     ]
   },
   {
