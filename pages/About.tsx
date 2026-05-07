@@ -34,7 +34,7 @@ const About: React.FC = () => {
                 </div>
             </div>
             <div className="relative h-96 rounded-lg overflow-hidden shadow-xl">
-                 <img src="https://picsum.photos/800/800?random=50" alt="Historic Quins Team" className="absolute inset-0 w-full h-full object-cover" />
+                 <img src="/assets/kh/rfeua.PNG" alt="Historic Quins Team" className="absolute inset-0 w-full h-full object-cover" />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
                      <span className="text-white font-bold text-lg">RFUEA Ground - Our Fortress</span>
                  </div>
