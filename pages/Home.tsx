@@ -56,7 +56,7 @@ const Home: React.FC = () => {
             <Link to="/fixtures" className="px-8 py-3 bg-quins-blue hover:bg-sky-600 text-white font-bold rounded-md transition text-center">
               View Fixtures
             </Link>
-            <Link to="/membership" className="px-8 py-3 bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white font-bold rounded-md transition text-center">
+            <Link to="/auth" className="px-8 py-3 bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white font-bold rounded-md transition text-center">
               Become a Member
             </Link>
           </div>

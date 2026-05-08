@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MEMBERSHIP_TIERS } from '../constants';
 import { Check } from 'lucide-react';
 
@@ -39,11 +40,11 @@ const Membership: React.FC = () => {
                                ))}
                            </ul>
                        </div>
-                       <div className="p-8 bg-gray-50 mt-auto">
-                           <button className={`w-full py-3 rounded-lg font-bold transition shadow-sm ${tier.recommended ? 'bg-quins-magenta text-white hover:bg-pink-700' : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-slate-400'}`}>
-                               Register Now
-                           </button>
-                       </div>
+                        <div className="p-8 bg-gray-50 mt-auto">
+                            <Link to="/auth" className={`block w-full py-3 rounded-lg font-bold transition shadow-sm text-center ${tier.recommended ? 'bg-quins-magenta text-white hover:bg-pink-700' : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-slate-400'}`}>
+                                Register Now
+                            </Link>
+                        </div>
                    </div>
                ))}
            </div>
