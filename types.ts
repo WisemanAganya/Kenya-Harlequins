@@ -121,3 +121,67 @@ export interface TicketInstance {
   checked_in_at?: string;
   event_title: string;
 }
+
+export interface Profile {
+  id: string;
+  email: string;
+  full_name: string;
+  phone?: string;
+  membership_status: 'active' | 'inactive' | 'pending';
+  membership_tier?: string;
+  avatar_url?: string;
+  created_at: string;
+}
+
+export interface MembershipRecord {
+  id: number;
+  user_id: string;
+  tier: string;
+  status: 'active' | 'inactive';
+  start_date: string;
+  expiry_date: string;
+  amount_paid: number;
+}
+
+export interface PaymentRecord {
+  id: number;
+  user_id: string;
+  amount: number;
+  payment_method: string;
+  purpose: 'membership' | 'ticket' | 'shop' | 'donation';
+  status: 'completed' | 'pending' | 'failed';
+  reference: string;
+  created_at: string;
+}
+
+export interface Communication {
+  id: number;
+  title: string;
+  content: string;
+  type: 'announcement' | 'memo' | 'agm_notice';
+  priority: 'low' | 'medium' | 'high';
+  file_url?: string;
+  created_at: string;
+  author: string;
+}
+
+export interface Meeting {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  program_url?: string;
+  type: 'AGM' | 'Meeting' | 'Activity';
+  status: 'upcoming' | 'past' | 'cancelled';
+}
+
+export interface Notification {
+  id: number;
+  user_id: string;
+  title: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}

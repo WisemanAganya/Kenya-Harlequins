@@ -3,7 +3,7 @@ import { supabase, hasSupabaseConfig } from '../supabase';
 import { Event, Product, Facility, BookingRequest, NewsItem, Order, Player } from '../types';
 import { LayoutDashboard, Newspaper, Calendar, ShoppingBag, ClipboardList, LogOut, Plus, Trash2, Edit3, CheckCircle, XCircle, Users, FileText, PieChart, BarChart, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
-type AdminTab = 'dashboard' | 'news' | 'events' | 'tickets' | 'shop' | 'bookings' | 'teams' | 'reports';
+type AdminTab = 'dashboard' | 'members' | 'comms' | 'meetings' | 'news' | 'events' | 'tickets' | 'shop' | 'bookings' | 'teams' | 'reports';
 
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
@@ -21,6 +21,9 @@ const Admin: React.FC = () => {
   const [facilityBookings, setFacilityBookings] = useState<BookingRequest[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
+  const [members, setMembers] = useState<any[]>([]);
+  const [comms, setComms] = useState<any[]>([]);
+  const [meetings, setMeetings] = useState<any[]>([]);
 
   // Modal states
   const [showEventModal, setShowEventModal] = useState(false);
@@ -66,6 +69,9 @@ const Admin: React.FC = () => {
       supabase.from('facility_bookings').select('*').order('created_at', { ascending: false }),
       supabase.from('players').select('*').order('id', { ascending: true }),
       supabase.from('tickets').select('*').order('created_at', { ascending: false }),
+      supabase.from('profiles').select('*').order('created_at', { ascending: false }),
+      supabase.from('communications').select('*').order('created_at', { ascending: false }),
+      supabase.from('meetings').select('*').order('date', { ascending: false }),
     ]);
 
     if (!ordersRes.error) setOrders(ordersRes.data || []);
@@ -75,6 +81,9 @@ const Admin: React.FC = () => {
     if (!bookingsRes.error) setFacilityBookings(bookingsRes.data || []);
     if (!playersRes.error) setPlayers(playersRes.data || []);
     if (!ticketsRes.error) setTickets(ticketsRes.data || []);
+    if (!membersRes.error) setMembers(membersRes.data || []);
+    if (!commsRes.error) setComms(commsRes.data || []);
+    if (!meetingsRes.error) setMeetings(meetingsRes.data || []);
 
     setLoading(false);
   };
@@ -189,6 +198,15 @@ const Admin: React.FC = () => {
           <button onClick={() => setActiveTab('news')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'news' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <Newspaper size={18} /> News & CMS
           </button>
+          <button onClick={() => setActiveTab('members')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'members' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
+            <Users size={18} /> Members & Registration
+          </button>
+          <button onClick={() => setActiveTab('comms')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'comms' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
+            <MessageSquare size={18} /> Memos & Comms
+          </button>
+          <button onClick={() => setActiveTab('meetings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'meetings' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
+            <FileText size={18} /> Meetings & AGMs
+          </button>
           <button onClick={() => setActiveTab('events')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'events' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <Calendar size={18} /> Match Fixtures
           </button>
@@ -300,6 +318,100 @@ const Admin: React.FC = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+
+            {activeTab === 'members' && (
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <table className="w-full text-left">
+                  <thead className="bg-slate-50 border-b border-slate-100">
+                    <tr>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Member Name</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Tier</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Status</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Joined</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {members.map(m => (
+                      <tr key={m.id} className="hover:bg-slate-50 transition">
+                        <td className="px-6 py-4">
+                          <p className="font-bold text-slate-900">{m.full_name}</p>
+                          <p className="text-[10px] text-slate-400">{m.email}</p>
+                        </td>
+                        <td className="px-6 py-4 text-xs font-bold text-slate-600 uppercase">{m.membership_tier}</td>
+                        <td className="px-6 py-4">
+                          <span className={`text-[10px] uppercase font-black px-3 py-1 rounded-full ${m.membership_status === 'active' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
+                            {m.membership_status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-xs text-slate-500">{new Date(m.created_at).toLocaleDateString()}</td>
+                        <td className="px-6 py-4 text-right">
+                           <button className="p-2 text-slate-400 hover:text-quins-blue transition"><Edit3 size={16} /></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {activeTab === 'comms' && (
+              <div className="space-y-6">
+                 <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-black text-slate-900 uppercase">Official Communications</h3>
+                    <button className="flex items-center gap-2 px-6 py-3 bg-quins-magenta text-white rounded-xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-quins-magenta/20 hover:bg-pink-700 transition">
+                       <Plus size={18} /> New Memo/Announcement
+                    </button>
+                 </div>
+                 <div className="grid gap-6">
+                    {comms.map(c => (
+                      <div key={c.id} className="bg-white p-6 rounded-2xl border border-slate-200 flex justify-between items-center group">
+                         <div className="flex gap-4">
+                            <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-quins-magenta transition">
+                               <MessageSquare size={20} />
+                            </div>
+                            <div>
+                               <h4 className="font-bold text-slate-900">{c.title}</h4>
+                               <p className="text-xs text-slate-500 uppercase tracking-widest font-black mt-1">{c.type} • {new Date(c.created_at).toLocaleDateString()}</p>
+                            </div>
+                         </div>
+                         <div className="flex gap-2">
+                            <button onClick={() => deleteItem('communications', c.id)} className="p-2 text-slate-300 hover:text-red-500 transition"><Trash2 size={16} /></button>
+                         </div>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+            )}
+
+            {activeTab === 'meetings' && (
+              <div className="space-y-6">
+                 <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-black text-slate-900 uppercase">Meetings & AGMs</h3>
+                    <button className="flex items-center gap-2 px-6 py-3 bg-quins-magenta text-white rounded-xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-quins-magenta/20 hover:bg-pink-700 transition">
+                       <Plus size={18} /> Schedule Meeting
+                    </button>
+                 </div>
+                 <div className="grid gap-6">
+                    {meetings.map(m => (
+                      <div key={m.id} className="bg-white p-6 rounded-2xl border border-slate-200 flex justify-between items-center group">
+                         <div className="flex gap-4">
+                            <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-quins-blue transition">
+                               <Calendar size={20} />
+                            </div>
+                            <div>
+                               <h4 className="font-bold text-slate-900">{m.title}</h4>
+                               <p className="text-xs text-slate-500 uppercase tracking-widest font-black mt-1">{m.type} • {m.date} at {m.time}</p>
+                            </div>
+                         </div>
+                         <div className="flex gap-2">
+                            <button onClick={() => deleteItem('meetings', m.id)} className="p-2 text-slate-300 hover:text-red-500 transition"><Trash2 size={16} /></button>
+                         </div>
+                      </div>
+                    ))}
+                 </div>
               </div>
             )}
 

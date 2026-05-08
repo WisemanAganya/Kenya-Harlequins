@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, ShoppingCart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, ShoppingCart, User } from 'lucide-react';
 import { NAV_ITEMS } from '../constants';
 import { useCart } from '../CartContext';
+import { supabase } from '../supabase';
 import CartDrawer from './CartDrawer';
 
 interface LayoutProps {
@@ -11,10 +12,22 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [session, setSession] = useState<any>(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const { totalItems, setIsCartOpen } = useCart();
 
+  const isAuthPage = location.pathname === '/auth';
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+    return () => subscription.unsubscribe();
+  }, []);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  if (isAuthPage) return <div className="min-h-screen bg-slate-950">{children}</div>;
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-slate-900 bg-gray-50">
@@ -81,7 +94,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 )}
               </button>
 
-              <NavLink to="/membership" className="ml-4 px-5 py-2 bg-quins-blue text-white rounded-md text-sm font-bold uppercase hover:bg-sky-600 transition shadow-sm">
+               {session ? (
+                <NavLink to="/dashboard" className="ml-4 flex items-center gap-2 px-5 py-2 bg-slate-900 text-white rounded-md text-sm font-bold uppercase hover:bg-quins-magenta transition shadow-sm group">
+                  <User size={16} className="text-quins-magenta group-hover:text-white transition" />
+                  Portal
+                </NavLink>
+              ) : (
+                <NavLink to="/auth" className="ml-4 px-5 py-2 bg-quins-blue text-white rounded-md text-sm font-bold uppercase hover:bg-sky-600 transition shadow-sm">
+                  Login
+                </NavLink>
+              )}
+              
+              <NavLink to="/membership" className="ml-2 px-5 py-2 bg-transparent border border-quins-blue text-quins-blue rounded-md text-sm font-bold uppercase hover:bg-quins-blue hover:text-white transition">
                 Join Us
               </NavLink>
             </div>
@@ -126,7 +150,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   {item.label}
                 </NavLink>
               ))}
-               <NavLink to="/membership" onClick={() => setIsMenuOpen(false)} className="block mt-4 px-3 py-3 bg-quins-blue text-white text-center rounded-md font-bold uppercase">
+              {session ? (
+                <NavLink to="/dashboard" onClick={() => setIsMenuOpen(false)} className="block mt-4 px-3 py-3 bg-slate-900 text-white text-center rounded-md font-bold uppercase">
+                  Member Portal
+                </NavLink>
+              ) : (
+                <NavLink to="/auth" onClick={() => setIsMenuOpen(false)} className="block mt-4 px-3 py-3 bg-quins-magenta text-white text-center rounded-md font-bold uppercase">
+                  Login
+                </NavLink>
+              )}
+               <NavLink to="/membership" onClick={() => setIsMenuOpen(false)} className="block mt-2 px-3 py-3 bg-quins-blue text-white text-center rounded-md font-bold uppercase">
                 Join Us
               </NavLink>
             </div>

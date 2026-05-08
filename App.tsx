@@ -19,6 +19,37 @@ const Admin = lazy(() => import('./pages/Admin'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Christie7s = lazy(() => import('./pages/Christie7s'));
 const VerifyTicket = lazy(() => import('./pages/VerifyTicket'));
+const Auth = lazy(() => import('./pages/Auth'));
+const MemberDashboard = lazy(() => import('./pages/MemberDashboard'));
+
+// Protected Route Component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [session, setSession] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) return (
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-quins-magenta border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+  
+  if (!session) return <Navigate to="/auth" replace />;
+  
+  return <>{children}</>;
+};
 
 const LoadingFallback = () => (
   <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -47,6 +78,15 @@ const App: React.FC = () => {
             <Route path="/reports" element={<Reports />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <MemberDashboard />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/verify/:hash" element={<VerifyTicket />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

@@ -151,3 +151,115 @@ FOR UPDATE USING (
 *   **Atomic Transations**: Using RPC functions to ensure data integrity during peak concurrency.
 *   **Indexing**: Sub-millisecond lookup speeds via B-Tree indices.
 *   **Load Handling**: Supabase automatically scales API nodes for massive throughput.
+
+## 5. Membership Management System
+
+```sql
+-- Profiles Table (Linked to Auth)
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT UNIQUE NOT NULL,
+  full_name TEXT NOT NULL,
+  phone TEXT,
+  membership_status TEXT DEFAULT 'inactive' CHECK (membership_status IN ('active', 'inactive', 'pending')),
+  membership_tier TEXT DEFAULT 'None',
+  avatar_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Memberships Table
+CREATE TABLE IF NOT EXISTS public.memberships (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  tier TEXT NOT NULL,
+  status TEXT DEFAULT 'active',
+  start_date DATE DEFAULT CURRENT_DATE,
+  expiry_date DATE,
+  amount_paid DECIMAL(12,2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Payments Table
+CREATE TABLE IF NOT EXISTS public.payments (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  amount DECIMAL(12,2) NOT NULL,
+  payment_method TEXT NOT NULL,
+  purpose TEXT NOT NULL, -- 'membership', 'ticket', 'shop'
+  status TEXT DEFAULT 'pending' CHECK (status IN ('completed', 'pending', 'failed')),
+  reference TEXT UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Communications Table (Memos, Announcements)
+CREATE TABLE IF NOT EXISTS public.communications (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('announcement', 'memo', 'agm_notice')),
+  priority TEXT DEFAULT 'medium',
+  file_url TEXT,
+  author TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Meetings Table
+CREATE TABLE IF NOT EXISTS public.meetings (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title TEXT NOT NULL,
+  date DATE NOT NULL,
+  time TIME NOT NULL,
+  location TEXT NOT NULL,
+  description TEXT,
+  program_url TEXT,
+  type TEXT CHECK (type IN ('AGM', 'Meeting', 'Activity')),
+  status TEXT DEFAULT 'upcoming',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Notifications Table
+CREATE TABLE IF NOT EXISTS public.notifications (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  message TEXT NOT NULL,
+  is_read BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 6. Trigger to create profile on signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, full_name)
+  VALUES (new.id, new.email, COALESCE(new.raw_user_meta_data->>'full_name', 'Quins Member'));
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- 7. RLS for Membership
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.memberships ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.communications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.meetings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+
+-- Profiles: Users can view and update their own profile
+CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+-- Memberships: Users can view own membership
+CREATE POLICY "Users can view own membership" ON public.memberships FOR SELECT USING (auth.uid() = user_id);
+
+-- Communications: Public can read
+CREATE POLICY "Public can view communications" ON public.communications FOR SELECT USING (true);
+
+-- Notifications: Users can view and update own notifications
+CREATE POLICY "Users can view own notifications" ON public.notifications FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can update own notifications" ON public.notifications FOR UPDATE USING (auth.uid() = user_id);
+```
