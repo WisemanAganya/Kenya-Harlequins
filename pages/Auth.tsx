@@ -151,6 +151,12 @@ const Auth: React.FC = () => {
               </div>
             </div>
 
+            <div className="mt-4 p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+              <p className="text-[10px] text-slate-500 text-center leading-relaxed font-medium">
+                By signing up, you agree to our <Link to="/terms" className="text-quins-blue hover:underline">Terms</Link> and acknowledge our <Link to="/privacy" className="text-quins-blue hover:underline">Privacy Policy</Link> in accordance with the <strong>Kenya Data Protection Act 2019</strong>.
+              </p>
+            </div>
+
             <button
               type="submit"
               disabled={loading}

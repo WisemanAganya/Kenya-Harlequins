@@ -231,8 +231,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
             <p>&copy; {new Date().getFullYear()} Kenya Harlequin Football Club. All Rights Reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-               <a href="#" className="hover:text-white">Privacy Policy</a>
-               <a href="#" className="hover:text-white">Terms & Conditions</a>
+               <NavLink to="/privacy" className="hover:text-white transition">Privacy Policy</NavLink>
+               <NavLink to="/terms" className="hover:text-white transition">Terms & Conditions</NavLink>
             </div>
           </div>
         </div>

@@ -21,6 +21,8 @@ const Christie7s = lazy(() => import('./pages/Christie7s'));
 const VerifyTicket = lazy(() => import('./pages/VerifyTicket'));
 const Auth = lazy(() => import('./pages/Auth'));
 const MemberDashboard = lazy(() => import('./pages/MemberDashboard'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -79,6 +81,8 @@ const App: React.FC = () => {
             <Route path="/admin" element={<Admin />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
             <Route 
               path="/dashboard" 
               element={
