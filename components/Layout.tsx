@@ -54,8 +54,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-20">
             {/* Logo Area */}
-             <NavLink to="/" className="flex items-center gap-2 group shrink-0">
-               <img src="/assets/kh/KH Logo.PNG" alt="Logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
+             <NavLink to="/" className="flex items-center gap-3 group shrink-0">
+               <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden bg-white border border-slate-100 shadow-sm flex items-center justify-center p-1 group-hover:border-quins-magenta transition-colors duration-300">
+                 <img src="/assets/kh/KH Logo.PNG" alt="Logo" className="w-full h-full object-contain" />
+               </div>
                <div className="flex flex-col">
                  <span className="font-black text-sm md:text-base uppercase tracking-tighter leading-none text-slate-900 group-hover:text-quins-magenta transition">Kenya Harlequins</span>
                  <span className="text-[10px] font-bold text-quins-magenta uppercase tracking-widest leading-none">#SSS</span>
