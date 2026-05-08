@@ -1,46 +1,56 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
-import Home from './pages/Home';
-import About from './pages/About';
-import History from './pages/History';
-import Teams from './pages/Teams';
-import Fixtures from './pages/Fixtures';
-import Tickets from './pages/Tickets';
-import Checkout from './pages/Checkout';
-import Facilities from './pages/Facilities';
-import Membership from './pages/Membership';
-import Shop from './pages/Shop';
-import News from './pages/News';
-import Reports from './pages/Reports';
-import Admin from './pages/Admin';
-import Contact from './pages/Contact';
-import Christie7s from './pages/Christie7s';
-import VerifyTicket from './pages/VerifyTicket';
+
+// Lazy load pages for performance
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const History = lazy(() => import('./pages/History'));
+const Teams = lazy(() => import('./pages/Teams'));
+const Fixtures = lazy(() => import('./pages/Fixtures'));
+const Tickets = lazy(() => import('./pages/Tickets'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Facilities = lazy(() => import('./pages/Facilities'));
+const Membership = lazy(() => import('./pages/Membership'));
+const Shop = lazy(() => import('./pages/Shop'));
+const News = lazy(() => import('./pages/News'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Admin = lazy(() => import('./pages/Admin'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Christie7s = lazy(() => import('./pages/Christie7s'));
+const VerifyTicket = lazy(() => import('./pages/VerifyTicket'));
+
+const LoadingFallback = () => (
+  <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="w-12 h-12 border-4 border-quins-magenta border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const App: React.FC = () => {
   return (
     <HashRouter>
       <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/teams" element={<Teams />} />
-          <Route path="/christie-7s" element={<Christie7s />} />
-          <Route path="/fixtures" element={<Fixtures />} />
-          <Route path="/tickets" element={<Tickets />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/facilities" element={<Facilities />} />
-          <Route path="/membership" element={<Membership />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/verify/:hash" element={<VerifyTicket />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/christie-7s" element={<Christie7s />} />
+            <Route path="/fixtures" element={<Fixtures />} />
+            <Route path="/tickets" element={<Tickets />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/facilities" element={<Facilities />} />
+            <Route path="/membership" element={<Membership />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/verify/:hash" element={<VerifyTicket />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </HashRouter>
   );

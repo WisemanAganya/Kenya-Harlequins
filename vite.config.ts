@@ -9,5 +9,17 @@ export default defineConfig(({ mode }) => {
         host: true,
       },
       plugins: [react()],
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+              'vendor-supabase': ['@supabase/supabase-js'],
+              'vendor-icons': ['lucide-react'],
+            },
+          },
+        },
+        chunkSizeWarningLimit: 1000,
+      },
     };
 });
