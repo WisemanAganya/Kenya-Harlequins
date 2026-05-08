@@ -36,19 +36,32 @@ const Checkout: React.FC = () => {
     }
 
     if (hasSupabaseConfig) {
-      const { error } = await supabase.from('orders').insert([
-        {
-          phone,
-          payment_method: paymentMethod,
-          subtotal,
-          items,
-          status: 'pending',
-          created_at: new Date().toISOString(),
-        },
-      ]);
+      // Prepare tickets for bulk insertion via RPC
+      const ticketItems = items.filter(i => i.type === 'ticket');
+      const ticketsToCreate = [];
 
-      if (error) {
-        setMessage('Unable to complete checkout at this time. Please try again later.');
+      for (const item of ticketItems) {
+        for (let q = 0; q < item.quantity; q++) {
+          ticketsToCreate.push({
+            ticket_type: item.name.split(' - ')[0],
+            event_title: item.name.split(' - ')[1] || 'Match Ticket',
+            full_name: 'Quins Supporter',
+            qr_hash: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+          });
+        }
+      }
+
+      // Use atomic RPC function to create order and tickets in one transaction
+      const { data: orderId, error: orderError } = await supabase.rpc('create_order_with_tickets', {
+        p_phone: phone,
+        p_payment_method: paymentMethod,
+        p_subtotal: subtotal,
+        p_items: items,
+        p_tickets: ticketsToCreate
+      });
+
+      if (orderError) {
+        setMessage('Transaction Failed: ' + orderError.message);
       } else {
         setIsSuccess(true);
         setTimeout(() => {

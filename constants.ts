@@ -225,7 +225,7 @@ export const SOCIAL_LINKS = [
   { label: 'WhatsApp', href: 'https://wa.me/254700000000', subtitle: 'Club chat', icon: '💬' },
 ];
 
-export const EVENT_LIST = [
+export const EVENT_LIST: Event[] = [
   {
     id: 1,
     title: 'Kenya Cup Home Fixture',
@@ -235,10 +235,10 @@ export const EVENT_LIST = [
     competition: 'Kenya Cup',
     category: 'Match Day',
     description: 'Support Quins at the RFUEA Ground for a high intensity home fixture with premium ticket access and match day hospitality.',
-    ticketTypes: [
-      { name: 'Standard', description: 'General admission stand.', price: 800 },
-      { name: 'VIP', description: 'Premium seating and hospitality.', price: 2500 },
-      { name: 'Student', description: 'Discounted entry for students.', price: 400 },
+    ticket_types: [
+      { name: 'Standard', description: 'General admission stand.', price: 800, category: 'Regular', day: 'Both', status: 'Open' },
+      { name: 'VIP', description: 'Premium seating and hospitality.', price: 2500, category: 'VIP', day: 'Both', status: 'Open' },
+      { name: 'Student', description: 'Discounted entry for students.', price: 400, category: 'Regular', day: 'Both', status: 'Open' },
     ]
   },
   {
@@ -248,11 +248,19 @@ export const EVENT_LIST = [
     time: '08:00',
     venue: 'RFUEA Ground',
     competition: 'Christie Sevens',
-    category: '7s Tournament',
-    ticketTypes: [
-      { name: 'Regular Pass', description: 'Early Bird: 450 | Advance: 650 | Gate: 800', price: 450 },
-      { name: 'VIP Pass', description: 'Early Bird: 2500 | Advance: 3000 | Gate: 4000', price: 2500 },
-      { name: 'Tailgate Pass', description: 'Solo: 5000 | Squad of 3: 14250 | Squad of 5: 22500', price: 5000 },
+    category: 'Tournament',
+    description: 'Africa\'s premier rugby 7s tournament. Join us for the 60th edition of this legendary festival.',
+    ticket_types: [
+      { name: 'Saturday Regular', description: 'Valid on Sat, Jul 19, 2025 / Starts at 08:00 AM', price: 800, category: 'Regular', day: 'Saturday', status: 'Closed' },
+      { name: 'Saturday VIP', description: 'Valid on Sat, Jul 19, 2025 / Starts at 08:00 AM', price: 4000, category: 'VIP', day: 'Saturday', status: 'Closed' },
+      { name: 'Sunday Regular', description: 'Valid on Sun, Jul 20, 2025 / Starts at 08:00 AM', price: 800, category: 'Regular', day: 'Sunday', status: 'Closed' },
+      { name: 'Sunday VIP', description: 'Valid on Sun, Jul 20, 2025 / Starts at 08:00 AM', price: 4000, category: 'VIP', day: 'Sunday', status: 'Closed' },
+      { name: 'Saturday Tailgate Solo', description: 'Valid on Sat, Jul 19, 2025 / Starts at 08:00 AM', price: 5000, category: 'Tailgate', day: 'Saturday', status: 'Closed' },
+      { name: 'Saturday Tailgate Trio (3)', description: 'Valid on Sat, Jul 19, 2025 / Starts at 08:00 AM', price: 14250, category: 'Tailgate', day: 'Saturday', status: 'Closed' },
+      { name: 'Saturday Tailgate Cinqo (5)', description: 'Valid on Sat, Jul 19, 2025 / Starts at 08:00 AM', price: 22500, category: 'Tailgate', day: 'Saturday', status: 'Closed' },
+      { name: 'Sunday Tailgate Solo', description: 'Valid on Sun, Jul 20, 2025 / Starts at 08:00 AM', price: 5000, category: 'Tailgate', day: 'Sunday', status: 'Closed' },
+      { name: 'Sunday Tailgate Trio (3)', description: 'Valid on Sun, Jul 20, 2025 / Starts at 08:00 AM', price: 14250, category: 'Tailgate', day: 'Sunday', status: 'Closed' },
+      { name: 'Sunday Tailgate Cinqo (5)', description: 'Valid on Sun, Jul 20, 2025 / Starts at 08:00 AM', price: 22500, category: 'Tailgate', day: 'Sunday', status: 'Closed' },
     ]
   },
   {
@@ -264,10 +272,10 @@ export const EVENT_LIST = [
     competition: 'Exhibition',
     category: 'Post Season',
     description: 'A family-friendly post season match with live entertainment, food trucks, and special club experiences.',
-    ticketTypes: [
-      { name: 'Standard', description: 'General admission', price: 700 },
-      { name: 'Family Bundle', description: '4 tickets at a special rate.', price: 2500 },
-      { name: 'Hospitality', description: 'Premium seating and refreshments.', price: 3200 },
+    ticket_types: [
+      { name: 'Standard', description: 'General admission', price: 700, category: 'Regular', day: 'Both', status: 'Open' },
+      { name: 'Family Bundle', description: '4 tickets at a special rate.', price: 2500, category: 'Regular', day: 'Both', status: 'Open' },
+      { name: 'Hospitality', description: 'Premium seating and refreshments.', price: 3200, category: 'VIP', day: 'Both', status: 'Open' },
     ]
   }
 ];

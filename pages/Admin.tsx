@@ -3,7 +3,7 @@ import { supabase, hasSupabaseConfig } from '../supabase';
 import { Event, Product, Facility, BookingRequest, NewsItem, Order, Player } from '../types';
 import { LayoutDashboard, Newspaper, Calendar, ShoppingBag, ClipboardList, LogOut, Plus, Trash2, Edit3, CheckCircle, XCircle, Users, FileText, PieChart, BarChart, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
-type AdminTab = 'dashboard' | 'news' | 'events' | 'shop' | 'bookings' | 'teams' | 'reports';
+type AdminTab = 'dashboard' | 'news' | 'events' | 'tickets' | 'shop' | 'bookings' | 'teams' | 'reports';
 
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
@@ -20,6 +20,21 @@ const Admin: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [facilityBookings, setFacilityBookings] = useState<BookingRequest[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
+
+  // Modal states
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [eventForm, setEventForm] = useState<Partial<Event>>({
+    title: '',
+    date: '',
+    time: '',
+    venue: 'RFUEA Ground',
+    competition: '',
+    category: 'Match Day',
+    description: '',
+    ticket_types: []
+  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
@@ -43,13 +58,14 @@ const Admin: React.FC = () => {
     if (!hasSupabaseConfig || !session) return;
     setLoading(true);
 
-    const [ordersRes, newsRes, eventsRes, shopRes, bookingsRes, playersRes] = await Promise.all([
+    const [ordersRes, newsRes, eventsRes, shopRes, bookingsRes, playersRes, ticketsRes] = await Promise.all([
       supabase.from('orders').select('*').order('created_at', { ascending: false }),
       supabase.from('news').select('*').order('published_at', { ascending: false }),
       supabase.from('events').select('*').order('date', { ascending: false }),
       supabase.from('products').select('*'),
       supabase.from('facility_bookings').select('*').order('created_at', { ascending: false }),
       supabase.from('players').select('*').order('id', { ascending: true }),
+      supabase.from('tickets').select('*').order('created_at', { ascending: false }),
     ]);
 
     if (!ordersRes.error) setOrders(ordersRes.data || []);
@@ -58,13 +74,30 @@ const Admin: React.FC = () => {
     if (!shopRes.error) setProducts(shopRes.data || []);
     if (!bookingsRes.error) setFacilityBookings(bookingsRes.data || []);
     if (!playersRes.error) setPlayers(playersRes.data || []);
+    if (!ticketsRes.error) setTickets(ticketsRes.data || []);
 
     setLoading(false);
   };
 
   useEffect(() => {
-    if (session) loadData();
-  }, [session, activeTab]);
+    if (!session) return;
+    loadData();
+
+    // Enable Realtime Sync for Admin Dashboard
+    const channel = supabase
+      .channel('admin-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tickets' }, () => {
+        loadData();
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, () => {
+        loadData();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
 
   const updateBookingStatus = async (id: number, status: string) => {
     const { error } = await supabase.from('facility_bookings').update({ status }).eq('id', id);
@@ -75,6 +108,46 @@ const Admin: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     const { error } = await supabase.from(table).delete().eq('id', id);
     if (!error) loadData();
+  };
+
+  const openEventModal = (event?: Event) => {
+    if (event) {
+      setEditingEvent(event);
+      setEventForm(event);
+    } else {
+      setEditingEvent(null);
+      setEventForm({
+        title: '',
+        date: '',
+        time: '',
+        venue: 'RFUEA Ground',
+        competition: '',
+        category: 'Match Day',
+        description: '',
+        ticket_types: []
+      });
+    }
+    setShowEventModal(true);
+  };
+
+  const saveEvent = async () => {
+    if (!eventForm.title || !eventForm.date) {
+      alert('Please fill in required fields');
+      return;
+    }
+    setLoading(true);
+    const { error } = editingEvent 
+      ? await supabase.from('events').update(eventForm).eq('id', editingEvent.id)
+      : await supabase.from('events').insert([eventForm]);
+    
+    if (error) {
+      alert(error.message);
+    } else {
+      setShowEventModal(false);
+      setEditingEvent(null);
+      loadData();
+    }
+    setLoading(false);
   };
 
   if (!session) {
@@ -119,6 +192,9 @@ const Admin: React.FC = () => {
           <button onClick={() => setActiveTab('events')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'events' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <Calendar size={18} /> Match Fixtures
           </button>
+          <button onClick={() => setActiveTab('tickets')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'tickets' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
+            <TicketIcon size={18} /> Digital Tickets
+          </button>
           <button onClick={() => setActiveTab('shop')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold text-sm uppercase ${activeTab === 'shop' ? 'bg-quins-magenta text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
             <ShoppingBag size={18} /> Shop Inventory
           </button>
@@ -143,7 +219,10 @@ const Admin: React.FC = () => {
             <p className="text-gray-500">Manage your application content and processes.</p>
           </div>
           {activeTab !== 'dashboard' && activeTab !== 'bookings' && (
-            <button className="flex items-center gap-2 bg-quins-magenta text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-pink-700 transition">
+            <button 
+              onClick={() => activeTab === 'events' ? openEventModal() : null}
+              className="flex items-center gap-2 bg-quins-magenta text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-pink-700 transition"
+            >
               <Plus size={18} /> Add New
             </button>
           )}
@@ -262,8 +341,8 @@ const Admin: React.FC = () => {
                     <div className="flex justify-between mb-4">
                       <span className="text-[10px] font-black uppercase tracking-widest text-quins-magenta">{e.competition}</span>
                       <div className="flex gap-2">
-                        <button className="text-slate-400 hover:text-quins-blue"><Edit3 size={14} /></button>
-                        <button onClick={() => deleteItem('events', e.id)} className="text-slate-400 hover:text-red-500"><Trash2 size={14} /></button>
+                        <button onClick={() => openEventModal(e)} className="text-slate-400 hover:text-quins-blue transition"><Edit3 size={14} /></button>
+                        <button onClick={() => deleteItem('events', e.id)} className="text-slate-400 hover:text-red-500 transition"><Trash2 size={14} /></button>
                       </div>
                     </div>
                     <h4 className="font-black text-lg text-slate-900 uppercase leading-tight mb-2">{e.title}</h4>
@@ -278,6 +357,48 @@ const Admin: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {activeTab === 'tickets' && (
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                <table className="w-full text-left">
+                  <thead className="bg-slate-50 border-b border-slate-100">
+                    <tr>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Ticket Holder</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Event</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Type</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400">Status</th>
+                      <th className="px-6 py-4 text-xs font-black uppercase text-slate-400 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {tickets.map(t => (
+                      <tr key={t.id} className="hover:bg-slate-50 transition">
+                        <td className="px-6 py-4">
+                          <p className="font-bold text-slate-900">{t.full_name}</p>
+                          <p className="text-[10px] font-mono text-slate-400">{t.qr_hash.substring(0, 8)}...</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-xs font-bold text-slate-600 uppercase">{t.event_title}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-[10px] font-black uppercase px-2 py-1 bg-slate-100 rounded text-slate-500">{t.ticket_type}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`text-[10px] uppercase font-black px-3 py-1 rounded-full ${t.status === 'checked_in' ? 'bg-amber-100 text-amber-600' : 'bg-green-100 text-green-600'}`}>
+                            {t.status === 'checked_in' ? 'Checked In' : 'Valid'}
+                          </span>
+                          {t.checked_in_at && <p className="text-[9px] text-slate-400 mt-1">{new Date(t.checked_in_at).toLocaleTimeString()}</p>}
+                        </td>
+                        <td className="px-6 py-4 text-right space-x-2">
+                           <button onClick={() => window.open(`/#/verify/${t.qr_hash}`, '_blank')} className="p-2 text-slate-400 hover:text-quins-blue transition" title="Preview Ticket"><ArrowRight size={16} /></button>
+                           <button onClick={() => deleteItem('tickets', t.id)} className="p-2 text-slate-400 hover:text-red-500 transition"><Trash2 size={16} /></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
 
@@ -481,6 +602,229 @@ const Admin: React.FC = () => {
           </div>
         )}
       </main>
+      {/* Event Management Modal */}
+      {showEventModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="bg-white rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+               <div>
+                  <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">{editingEvent ? 'Edit Event' : 'Create New Event'}</h3>
+                  <p className="text-sm text-gray-500">Configure event details and ticket pricing.</p>
+               </div>
+               <button onClick={() => setShowEventModal(false)} className="p-2 hover:bg-white rounded-full transition"><XCircle size={24} className="text-slate-400" /></button>
+            </div>
+            
+            <div className="p-8 space-y-8">
+               <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                     <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Event Title</label>
+                     <input 
+                        value={eventForm.title} 
+                        onChange={(e) => setEventForm({...eventForm, title: e.target.value})}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold"
+                        placeholder="e.g. Christie Sevens 2025"
+                     />
+                  </div>
+                  <div className="space-y-2">
+                     <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Category</label>
+                     <select 
+                        value={eventForm.category}
+                        onChange={(e) => setEventForm({...eventForm, category: e.target.value as any})}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold"
+                     >
+                        <option value="Tournament">Tournament</option>
+                        <option value="Regular Season">Regular Season</option>
+                        <option value="Post Season">Post Season</option>
+                        <option value="Match Day">Match Day</option>
+                     </select>
+                  </div>
+                  <div className="space-y-2">
+                     <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Date</label>
+                     <input 
+                        type="date"
+                        value={eventForm.date} 
+                        onChange={(e) => setEventForm({...eventForm, date: e.target.value})}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold"
+                     />
+                  </div>
+                  <div className="space-y-2">
+                     <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Time</label>
+                     <input 
+                        type="time"
+                        value={eventForm.time} 
+                        onChange={(e) => setEventForm({...eventForm, time: e.target.value})}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold"
+                     />
+                  </div>
+                  <div className="space-y-2">
+                     <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Venue</label>
+                     <input 
+                        value={eventForm.venue} 
+                        onChange={(e) => setEventForm({...eventForm, venue: e.target.value})}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold"
+                     />
+                  </div>
+                  <div className="space-y-2">
+                     <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Competition</label>
+                     <input 
+                        value={eventForm.competition} 
+                        onChange={(e) => setEventForm({...eventForm, competition: e.target.value})}
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold"
+                     />
+                  </div>
+               </div>
+
+               <div className="space-y-2">
+                  <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Description</label>
+                  <textarea 
+                     value={eventForm.description} 
+                     onChange={(e) => setEventForm({...eventForm, description: e.target.value})}
+                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-quins-magenta outline-none transition font-bold h-24"
+                     placeholder="Event description..."
+                  />
+               </div>
+
+               <div className="space-y-6 pt-6 border-t border-slate-100">
+                  <div className="flex justify-between items-center">
+                     <h4 className="text-lg font-black uppercase tracking-tighter">Ticket Tiers</h4>
+                     <button 
+                        onClick={() => setEventForm({
+                           ...eventForm, 
+                           ticket_types: [
+                              ...(eventForm.ticket_types || []), 
+                              { name: 'New Tier', price: 0, description: '', category: 'Regular', day: 'Both', status: 'Open' }
+                           ]
+                        })}
+                        className="flex items-center gap-2 text-xs font-black uppercase bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-quins-magenta transition"
+                     >
+                        <Plus size={14} /> Add Tier
+                     </button>
+                  </div>
+
+                  <div className="space-y-4">
+                     {(eventForm.ticket_types || []).map((ticket, index) => (
+                        <div key={index} className="p-6 bg-slate-50 rounded-2xl border border-slate-200 grid gap-4 md:grid-cols-4 items-end">
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black uppercase text-slate-400">Name</label>
+                              <input 
+                                 value={ticket.name}
+                                 onChange={(e) => {
+                                    const newTickets = [...(eventForm.ticket_types || [])];
+                                    newTickets[index].name = e.target.value;
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-bold"
+                              />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black uppercase text-slate-400">Price (KES)</label>
+                              <input 
+                                 type="number"
+                                 value={ticket.price}
+                                 onChange={(e) => {
+                                    const newTickets = [...(eventForm.ticket_types || [])];
+                                    newTickets[index].price = parseInt(e.target.value) || 0;
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-bold"
+                              />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black uppercase text-slate-400">Category</label>
+                              <select 
+                                 value={ticket.category}
+                                 onChange={(e) => {
+                                    const newTickets = [...(eventForm.ticket_types || [])];
+                                    newTickets[index].category = e.target.value as any;
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-bold"
+                              >
+                                 <option value="Regular">Regular</option>
+                                 <option value="VIP">VIP</option>
+                                 <option value="Tailgate">Tailgate</option>
+                                 <option value="Flash Sale">Flash Sale</option>
+                              </select>
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black uppercase text-slate-400">Day</label>
+                              <select 
+                                 value={ticket.day}
+                                 onChange={(e) => {
+                                    const newTickets = [...(eventForm.ticket_types || [])];
+                                    newTickets[index].day = e.target.value as any;
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-bold"
+                              >
+                                 <option value="Saturday">Saturday</option>
+                                 <option value="Sunday">Sunday</option>
+                                 <option value="Both">Both</option>
+                              </select>
+                           </div>
+                           <div className="space-y-1 col-span-2">
+                              <label className="text-[10px] font-black uppercase text-slate-400">Description / Validity Info</label>
+                              <input 
+                                 value={ticket.description}
+                                 onChange={(e) => {
+                                    const newTickets = [...(eventForm.ticket_types || [])];
+                                    newTickets[index].description = e.target.value;
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-bold"
+                                 placeholder="e.g. Valid on Sat, Jul 19..."
+                              />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black uppercase text-slate-400">Status</label>
+                              <select 
+                                 value={ticket.status}
+                                 onChange={(e) => {
+                                    const newTickets = [...(eventForm.ticket_types || [])];
+                                    newTickets[index].status = e.target.value as any;
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm font-bold"
+                              >
+                                 <option value="Open">Open</option>
+                                 <option value="Closed">Closed</option>
+                                 <option value="Sold Out">Sold Out</option>
+                              </select>
+                           </div>
+                           <div className="flex justify-end">
+                              <button 
+                                 onClick={() => {
+                                    const newTickets = eventForm.ticket_types?.filter((_, i) => i !== index);
+                                    setEventForm({...eventForm, ticket_types: newTickets});
+                                 }}
+                                 className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
+                              >
+                                 <Trash2 size={18} />
+                              </button>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+            </div>
+
+            <div className="p-8 border-t border-slate-100 flex justify-end gap-4 bg-slate-50">
+               <button 
+                  onClick={() => setShowEventModal(false)}
+                  className="px-6 py-3 rounded-xl font-black uppercase text-xs tracking-widest text-slate-400 hover:text-slate-600 transition"
+               >
+                  Cancel
+               </button>
+               <button 
+                  onClick={saveEvent}
+                  className="px-10 py-3 bg-quins-magenta text-white rounded-xl font-black uppercase text-xs tracking-widest shadow-lg hover:bg-pink-700 transition"
+               >
+                  {editingEvent ? 'Update Event' : 'Create Event'}
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

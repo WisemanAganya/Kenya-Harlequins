@@ -1,241 +1,153 @@
-# Supabase Configuration Guide
+# Supabase Production Setup & Optimization
 
-## Quick Start
+This document outlines the high-concurrency database architecture for Kenya Harlequins RFC, optimized for Christie Sevens and other major events.
 
-### 1. Create Supabase Project
-- Go to [supabase.com](https://supabase.com)
-- Click "New Project"
-- Choose your organization and region (Africa recommended)
-- Set a strong database password
-- Wait for project initialization
+## 1. Database Schema
 
-### 2. Get Credentials
-- Project Settings > API
-- Copy **Project URL** → `VITE_SUPABASE_URL`
-- Copy **anon public** key → `VITE_SUPABASE_ANON_KEY`
-- Add to `.env.local`
-
-### 3. Create Tables
-
-Go to Supabase Dashboard > SQL Editor and run these queries:
+Run these commands in the Supabase SQL Editor.
 
 ```sql
--- Create events table
-CREATE TABLE events (
-  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  title TEXT NOT NULL,
-  date DATE NOT NULL,
-  time TIME,
-  venue TEXT,
-  competition TEXT,
-  category TEXT,
-  description TEXT,
-  ticket_types JSONB,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+-- Enable Realtime
+ALTER TABLE public.tickets SET (realtime = true);
 
--- Create orders table
-CREATE TABLE orders (
+-- Orders Table
+CREATE TABLE IF NOT EXISTS public.orders (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   phone TEXT NOT NULL,
-  payment_method TEXT,
-  subtotal NUMERIC,
-  items JSONB,
-  status TEXT DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT NOW()
+  payment_method TEXT NOT NULL,
+  subtotal DECIMAL(12,2) NOT NULL,
+  items JSONB NOT NULL,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'cancelled')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create facility_bookings table
-CREATE TABLE facility_bookings (
+-- Optimized Tickets Table
+CREATE TABLE IF NOT EXISTS public.tickets (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  phone TEXT NOT NULL,
-  facility TEXT NOT NULL,
-  event_date DATE,
-  notes TEXT,
-  status TEXT DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT NOW()
+  order_id BIGINT REFERENCES public.orders(id) ON DELETE CASCADE,
+  event_title TEXT NOT NULL,
+  ticket_type TEXT NOT NULL,
+  full_name TEXT DEFAULT 'Quins Supporter',
+  status TEXT DEFAULT 'valid' CHECK (status IN ('valid', 'checked_in', 'cancelled')),
+  qr_hash TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  checked_in_at TIMESTAMP WITH TIME ZONE,
+  staff_id UUID REFERENCES auth.users(id)
 );
 
--- Create memberships table
-CREATE TABLE memberships (
-  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_email TEXT UNIQUE NOT NULL,
-  tier TEXT,
-  status TEXT DEFAULT 'active',
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Create news table
-CREATE TABLE news (
-  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  title TEXT NOT NULL,
-  excerpt TEXT,
-  content TEXT,
-  image_url TEXT,
-  category TEXT,
-  published_at TIMESTAMP DEFAULT NOW()
-);
-
--- Create admin_users table for authentication
-CREATE TABLE admin_users (
+-- Admin Users (Reference for RLS)
+CREATE TABLE IF NOT EXISTS public.admin_users (
   id UUID PRIMARY KEY REFERENCES auth.users(id),
   email TEXT UNIQUE NOT NULL,
-  role TEXT DEFAULT 'admin',
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### 4. Enable Row-Level Security (RLS)
-
-```sql
--- Disable public access to all tables by default
-ALTER TABLE events ENABLE ROW LEVEL SECURITY;
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-ALTER TABLE facility_bookings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE memberships ENABLE ROW LEVEL SECURITY;
-ALTER TABLE news ENABLE ROW LEVEL SECURITY;
-ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
-
--- Allow public read for events
-CREATE POLICY "Allow public read events" ON events
-  FOR SELECT USING (true);
-
--- Allow public read for news
-CREATE POLICY "Allow public read news" ON news
-  FOR SELECT USING (true);
-
--- Allow authenticated users to create orders
-CREATE POLICY "Allow users to create orders" ON orders
-  FOR INSERT WITH CHECK (true);
-
--- Allow authenticated users to create bookings
-CREATE POLICY "Allow users to create bookings" ON facility_bookings
-  FOR INSERT WITH CHECK (true);
-
--- Restrict admin access
-CREATE POLICY "Only admin can read admin data" ON orders
-  FOR SELECT USING (auth.role() = 'authenticated');
-```
-
-### 5. Set Up Authentication
-
-- Go to Authentication > Providers
-- Enable "Email" provider
-- Email Templates > Customize (optional)
-
-### 6. Create Admin Account
-
-In Supabase console:
-```sql
-INSERT INTO admin_users (id, email, role)
-VALUES (uuid_generate_v4(), 'admin@quins.co.ke', 'admin');
-```
-
-Then sign up through the app at `/#/admin`
-
-### 7. Sample Data (Optional)
-
-```sql
-INSERT INTO events (title, date, time, venue, competition, category, description, ticket_types)
-VALUES (
-  'Kenya Cup Home Fixture',
-  '2025-06-12',
-  '16:00',
-  'RFUEA Ground',
-  'Kenya Cup',
-  'Match Day',
-  'Support Quins at home',
-  '[{"name":"Standard","price":800},{"name":"VIP","price":2500}]'::JSONB
+  role TEXT DEFAULT 'staff',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-INSERT INTO news (title, excerpt, content, category)
-VALUES (
-  'Quins Secure Victory',
-  'Harlequins edge out Impala in thrilling encounter',
-  'Full match report...',
-  'Match Report'
-);
+-- Performance Indices
+CREATE INDEX IF NOT EXISTS idx_tickets_qr_hash ON public.tickets(qr_hash);
+CREATE INDEX IF NOT EXISTS idx_tickets_status ON public.tickets(status);
+CREATE INDEX IF NOT EXISTS idx_tickets_order_id ON public.tickets(order_id);
+CREATE INDEX IF NOT EXISTS idx_orders_phone ON public.orders(phone);
 ```
 
-## Advanced Configuration
+## 2. High-Concurrency Logic (RPC)
 
-### M-Pesa Payment Integration
+These functions handle atomic operations to prevent race conditions during peak traffic.
 
-1. Register with Safaricom Daraja API
-2. Get Consumer Key & Secret
-3. Create a webhook endpoint to receive payment notifications
-4. Update order status when payment confirmed
+```sql
+-- Function to handle atomic check-ins
+CREATE OR REPLACE FUNCTION public.check_in_ticket(p_qr_hash TEXT)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  v_ticket_id BIGINT;
+  v_status TEXT;
+BEGIN
+  -- Row-level locking to prevent concurrent check-ins
+  SELECT id, status INTO v_ticket_id, v_status
+  FROM public.tickets
+  WHERE qr_hash = p_qr_hash
+  FOR UPDATE;
 
-```javascript
-// Example webhook handler
-async function handleMpesaCallback(req, res) {
-  const result = req.body.Result;
-  const orderId = result.Description;
-  
-  // Update order in Supabase
-  await supabase
-    .from('orders')
-    .update({ status: 'confirmed' })
-    .eq('id', orderId);
-}
-```
+  IF v_ticket_id IS NULL THEN
+    RETURN jsonb_build_object('success', false, 'message', 'Ticket not found');
+  END IF;
 
-### Email Notifications
+  IF v_status = 'checked_in' THEN
+    RETURN jsonb_build_object('success', false, 'message', 'Ticket already used');
+  END IF;
 
-Use Supabase Functions to send emails on order creation:
+  -- Perform check-in
+  UPDATE public.tickets
+  SET status = 'checked_in',
+      checked_in_at = NOW(),
+      staff_id = auth.uid()
+  WHERE id = v_ticket_id;
 
-```javascript
-import { serve } from "https://deno.land/std@0.175.0/http/server.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+  RETURN jsonb_build_object('success', true, 'message', 'Check-in successful');
+END;
+$$;
 
-const supabase = createClient(
-  Deno.env.get("SUPABASE_URL"),
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+-- Atomic Order + Ticket Creation (Batch Processing)
+CREATE OR REPLACE FUNCTION public.create_order_with_tickets(
+  p_phone TEXT,
+  p_payment_method TEXT,
+  p_subtotal DECIMAL,
+  p_items JSONB,
+  p_tickets JSONB
 )
+RETURNS BIGINT
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  v_order_id BIGINT;
+BEGIN
+  -- Insert order
+  INSERT INTO public.orders (phone, payment_method, subtotal, items, status)
+  VALUES (p_phone, p_payment_method, p_subtotal, p_items, 'pending')
+  RETURNING id INTO v_order_id;
 
-serve(async (req) => {
-  const { record } = await req.json()
-  
-  // Send email notification
-  // TODO: Integrate with email service (SendGrid, Resend, etc.)
-  
-  return new Response(JSON.stringify({ ok: true }))
-})
+  -- Bulk insert tickets
+  INSERT INTO public.tickets (order_id, ticket_type, event_title, full_name, qr_hash, status)
+  SELECT 
+    v_order_id,
+    (t->>'ticket_type'),
+    (t->>'event_title'),
+    (t->>'full_name'),
+    (t->>'qr_hash'),
+    'valid'
+  FROM jsonb_array_elements(p_tickets) AS t;
+
+  RETURN v_order_id;
+END;
+$$;
 ```
 
-### Backups
+## 3. Security & RLS
 
-- Supabase Pro: Daily automated backups
-- Enterprise: Hourly backups + custom retention
-- Free tier: Manual backups only
+```sql
+ALTER TABLE public.tickets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
-## Monitoring & Maintenance
+CREATE POLICY "Public order creation" ON public.orders FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public order view" ON public.orders FOR SELECT USING (true);
+CREATE POLICY "Public ticket view" ON public.tickets FOR SELECT USING (true);
 
-- Monitor database performance in Supabase dashboard
-- Set up alerts for high query latency
-- Review Row-Level Security policies periodically
-- Keep auth rules up to date
-- Archive old orders annually
+-- Only authenticated staff can check-in
+CREATE POLICY "Admin ticket check-in" ON public.tickets 
+FOR UPDATE USING (
+  EXISTS (
+    SELECT 1 FROM public.admin_users 
+    WHERE id = auth.uid()
+  )
+);
+```
 
-## Troubleshooting
-
-### "VITE_SUPABASE_URL not defined"
-- Check `.env.local` file exists
-- Verify environment variable names match exactly
-- Restart dev server after changes
-
-### "Insert operation forbidden"
-- Check Row-Level Security policies
-- Verify user has appropriate permissions
-- Enable public insert for guest users if needed
-
-### "Connection timeout"
-- Verify Supabase project is running
-- Check network connectivity
-- Look at Supabase logs for errors
-
----
-
-**Need help?** Visit [supabase.io/docs](https://supabase.io/docs)
+## 4. Production Strategy
+*   **Realtime**: Enabled on `tickets` for live sync between 10+ scanning devices.
+*   **Atomic Transations**: Using RPC functions to ensure data integrity during peak concurrency.
+*   **Indexing**: Sub-millisecond lookup speeds via B-Tree indices.
+*   **Load Handling**: Supabase automatically scales API nodes for massive throughput.

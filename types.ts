@@ -46,6 +46,11 @@ export interface TicketType {
   name: string;
   description: string;
   price: number;
+  category?: 'Regular' | 'VIP' | 'Tailgate' | 'Flash Sale';
+  day?: 'Saturday' | 'Sunday' | 'Both';
+  status?: 'Open' | 'Closed' | 'Sold Out';
+  expires_at?: string;
+  quantity_available?: number;
 }
 
 export interface Event {
@@ -55,7 +60,7 @@ export interface Event {
   time: string;
   venue: string;
   competition: string;
-  category: string;
+  category: 'Tournament' | 'Regular Season' | 'Post Season' | 'Match Day';
   description: string;
   ticket_types: TicketType[];
 }
@@ -103,4 +108,16 @@ export interface Order {
   items: CartItem[];
   status: 'pending' | 'completed' | 'cancelled';
   created_at: string;
+}
+
+export interface TicketInstance {
+  id: number;
+  order_id: number;
+  ticket_type: string;
+  full_name: string;
+  status: 'valid' | 'checked_in' | 'cancelled';
+  qr_hash: string;
+  created_at: string;
+  checked_in_at?: string;
+  event_title: string;
 }

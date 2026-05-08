@@ -15,7 +15,7 @@ const Christie7s: React.FC = () => {
         { label: "256 players", icon: <Users size={16} /> },
         { label: "2 days", icon: <Zap size={16} /> }
       ],
-      image: "/assets/kh/Hero/H1.jpg"
+      image: "/assets/kh/Christie 7s/mens.PNG"
     },
     womens: {
       title: "Women’s Tournament",
@@ -26,7 +26,7 @@ const Christie7s: React.FC = () => {
         { label: "96 players", icon: <Users size={16} /> },
         { label: "2 days", icon: <Zap size={16} /> }
       ],
-      image: "/assets/kh/Hero/H2.PNG"
+      image: "/assets/kh/Christie 7s/womens.PNG"
     },
     age: {
       title: "Under 16s tournament",
@@ -37,7 +37,7 @@ const Christie7s: React.FC = () => {
         { label: "192 players", icon: <Users size={16} /> },
         { label: "1 day", icon: <Zap size={16} /> }
       ],
-      image: "/assets/kh/Hero/H3.PNG"
+      image: "/assets/kh/Christie 7s/age grade.PNG"
     },
     veterans: {
       title: "Golden Oldies",
@@ -48,7 +48,7 @@ const Christie7s: React.FC = () => {
         { label: "96 players", icon: <Users size={16} /> },
         { label: "Young at heart", icon: <Zap size={16} /> }
       ],
-      image: "/assets/kh/Hero/H4.PNG"
+      image: "/assets/kh/Christie 7s/Golden oldies.PNG"
     }
   };
 
@@ -58,7 +58,7 @@ const Christie7s: React.FC = () => {
       <section className="relative h-[80vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="/assets/kh/Hero/H5.jpg" 
+            src="/assets/kh/Christie 7s/hero  Background.PNG" 
             alt="Christie 7s Action" 
             className="w-full h-full object-cover opacity-50 scale-110"
           />
